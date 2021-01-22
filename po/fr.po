@@ -1,0 +1,345 @@
+# French Translation for gtktetcolor.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# Dominique Hazaël-Massieux <hazaeld0@cti.ecp.fr>, 2000.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-12-29 23:22+1000\n"
+"PO-Revision-Date: 2000-08-18 17:02+0200\n"
+"Last-Translator: Dominique Hazaël-Massieux <hazaeld0@cti.ecp.fr>\n"
+"Language-Team: FRENCH <fr@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8biy\n"
+
+#: src/interface.c:73 src/interface.c:269
+#, fuzzy
+msgid "_Pause"
+msgstr "Pause"
+
+#: src/interface.c:74 src/interface.c:107 src/interface.c:349
+#, fuzzy
+msgid "Pause game"
+msgstr "Mettre en pause"
+
+#: src/interface.c:86 src/interface.c:302
+msgid "on keys"
+msgstr "Touches clavier"
+
+#: src/interface.c:87 src/interface.c:702
+msgid "Help on keys"
+msgstr "Aide sur les touches"
+
+#: src/interface.c:102
+msgid "New"
+msgstr "Nouveau"
+
+#: src/interface.c:102 src/interface.c:335 src/interface.c:336
+#, fuzzy
+msgid "New game"
+msgstr "Nouvelle partie"
+
+#: src/interface.c:104 src/interface.c:278 src/interface.c:341
+#: src/interface.c:343
+msgid "Scores"
+msgstr "Scores"
+
+#: src/interface.c:104 src/interface.c:592
+msgid "Top scores"
+msgstr "Meilleurs scores"
+
+#: src/interface.c:107 src/interface.c:351
+msgid "Pause"
+msgstr "Pause"
+
+#: src/interface.c:110
+msgid "Props"
+msgstr "Prop."
+
+#: src/interface.c:110 src/interface.c:357
+msgid "Preferences"
+msgstr "Préférences"
+
+#: src/interface.c:113
+msgid "Quit"
+msgstr "Quitter"
+
+#: src/interface.c:113 src/interface.c:364
+#, fuzzy
+msgid "Quit game"
+msgstr "Quitter le jeu"
+
+#: src/interface.c:121
+#, fuzzy
+msgid "/_Game"
+msgstr "Jeu"
+
+#: src/interface.c:122
+msgid "/Game/_New"
+msgstr ""
+
+#: src/interface.c:123
+#, fuzzy
+msgid "/Game/_Pause"
+msgstr "Jeu en pause"
+
+#: src/interface.c:124
+#, fuzzy
+msgid "/Game/_Scores"
+msgstr "Scores"
+
+#: src/interface.c:125
+#, fuzzy
+msgid "/Game/_Preferences"
+msgstr "Préférences"
+
+#: src/interface.c:127
+msgid "/Game/_Quit"
+msgstr ""
+
+#: src/interface.c:128
+#, fuzzy
+msgid "/_Help"
+msgstr "Aide"
+
+#: src/interface.c:129
+#, fuzzy
+msgid "/Help/on keys"
+msgstr "Aide sur les touches"
+
+#: src/interface.c:130
+#, fuzzy
+msgid "/Help/_About"
+msgstr "A propos"
+
+#: src/interface.c:191 src/interface.c:197
+msgid "gtktetcolor"
+msgstr "gtktetcolor"
+
+#: src/interface.c:250
+#, fuzzy
+msgid "_Game"
+msgstr "Jeu"
+
+#.
+#. new = gtk_image_menu_item_new_from_stock (GTK_STOCK_NEW, accel_group);
+#.
+#: src/interface.c:260
+#, fuzzy
+msgid "_New game"
+msgstr "Nouvelle partie"
+
+#: src/interface.c:309
+#, fuzzy
+msgid "_About"
+msgstr "A propos"
+
+#: src/interface.c:342
+msgid "top scores"
+msgstr "Meilleurs scores"
+
+#: src/interface.c:350
+msgid "Temporarily stop the game"
+msgstr ""
+
+#: src/interface.c:402
+#, fuzzy
+msgid "Level"
+msgstr "Niveau"
+
+#: src/interface.c:417 src/game.c:349
+#, fuzzy
+msgid "Score"
+msgstr "Scores"
+
+#: src/interface.c:462
+msgid "max score"
+msgstr "Meilleur score"
+
+#: src/interface.c:533
+msgid "Andrey V. Panov"
+msgstr "Andrey V. Panov"
+
+#.
+#. const gchar *documenters[] = {
+#. NULL
+#. };
+#.
+#: src/interface.c:543
+msgid "translator_credits"
+msgstr ""
+
+#: src/interface.c:570
+msgid "This program is covered by the GNU GPL"
+msgstr "Ce programme est régi par la GNU GPL"
+
+#: src/interface.c:604
+msgid "Hall of fame"
+msgstr "Panthéon"
+
+#: src/interface.c:639
+msgid "Enter name"
+msgstr "Entrez votre nom"
+
+#: src/interface.c:650
+msgid "Enter your name"
+msgstr "Entrez votre nom"
+
+#: src/interface.c:676
+#, fuzzy
+msgid "Game is paused"
+msgstr "Jeu en pause"
+
+#: src/interface.c:688
+#, fuzzy
+msgid "Gtktetcolor is paused"
+msgstr "gtktetcolor"
+
+#: src/interface.c:715
+#, fuzzy
+msgid ""
+"Left arrow  - shift block left\n"
+"Down arrow  - rotate block clockwise\n"
+"Right arrow - shift block right\n"
+"Up arrow    - rotate block counter-clockwise\n"
+"Space - drop block"
+msgstr ""
+"Num 4 - déplace la brique vers la gauche\n"
+"Num 5 - fait tourner la brique dans le sens des aiguilles d'une montre\n"
+"Num 6 - déplace la briquer vers la droite\n"
+"Num 8 - fait tourner la brique dans le sens inverse des aiguilles d'une "
+"montre\n"
+"Espace - fait descendre la brique"
+
+#: src/interface.c:721
+msgid ""
+"Num 4 - shift block left\n"
+"Num 5 - rotate block clockwise\n"
+"Num 6 - shift block right\n"
+"Num 8 - rotate block counter-clockwise\n"
+"Space - drop block"
+msgstr ""
+"Num 4 - déplace la brique vers la gauche\n"
+"Num 5 - fait tourner la brique dans le sens des aiguilles d'une montre\n"
+"Num 6 - déplace la briquer vers la droite\n"
+"Num 8 - fait tourner la brique dans le sens inverse des aiguilles d'une "
+"montre\n"
+"Espace - fait descendre la brique"
+
+#: src/interface.c:770
+msgid "GtkTetcolor preferences"
+msgstr "Préférences de GtkTetcolor"
+
+#: src/interface.c:785
+msgid "Game options"
+msgstr "Options du jeu"
+
+#: src/interface.c:798
+msgid "Font for labels"
+msgstr "Police pour les labels"
+
+#: src/interface.c:809
+msgid "Cell size: "
+msgstr "Taille des cellules :"
+
+#: src/interface.c:829
+msgid "Initial level: "
+msgstr "Niveau initial :"
+
+#: src/interface.c:849
+msgid "Delay before cell destroying, ms: "
+msgstr ""
+
+#: src/interface.c:870
+msgid "Choose keys"
+msgstr "Choisissez les touches"
+
+#: src/interface.c:879
+msgid "numeric keyboard"
+msgstr "Pavé numérique"
+
+#: src/interface.c:889
+msgid "arrow keys"
+msgstr "Flêches du curseur"
+
+#: src/interface.c:906
+msgid "Use sound"
+msgstr ""
+
+#: src/interface.c:927
+msgid "Show text in toolbar"
+msgstr ""
+
+#: src/callbacks.c:77 src/game.c:235
+#, fuzzy
+msgid "Gtktetcolor"
+msgstr "gtktetcolor"
+
+#: src/game.c:228 src/preferences.c:184
+msgid "Game over"
+msgstr "Perdu"
+
+#: src/game.c:374 src/preferences.c:181
+msgid "Bonus"
+msgstr "Bonus"
+
+#: src/gtktetcolor.desktop.in.h:1
+#, fuzzy
+msgid "Gtketcolor"
+msgstr "gtktetcolor"
+
+#: src/gtktetcolor.desktop.in.h:2
+#, fuzzy
+msgid "tetcolor for Gnome"
+msgstr "Préférences de GtkTetcolor"
+
+#, fuzzy
+#~ msgid "(C) 1999-2004"
+#~ msgstr "(C) 1999, 2000"
+
+#~ msgid "About gtktetcolor"
+#~ msgstr "A propos de gtktetcolor"
+
+#~ msgid "pause game"
+#~ msgstr "Mettre en pause"
+
+#, fuzzy
+#~ msgid "help on keys"
+#~ msgstr "Aide sur les touches"
+
+#, fuzzy
+#~ msgid "new"
+#~ msgstr "Nouveau"
+
+#, fuzzy
+#~ msgid "scores"
+#~ msgstr "Score"
+
+#, fuzzy
+#~ msgid "pause"
+#~ msgstr "Pause"
+
+#, fuzzy
+#~ msgid "preferences"
+#~ msgstr "Préférences"
+
+#~ msgid "score"
+#~ msgstr "Score"
+
+#~ msgid "Close"
+#~ msgstr "Fermer"
+
+#~ msgid "Ok"
+#~ msgstr "OK"
+
+#~ msgid "Apply"
+#~ msgstr "Appliquer"
+
+#~ msgid "Continue game"
+#~ msgstr "Reprendre jeu"
+
+#~ msgid "OK"
+#~ msgstr "OK"

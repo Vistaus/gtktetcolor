@@ -1,0 +1,10 @@
+# List of source files containing translatable strings.
+
+src/main.c
+src/interface.c
+src/callbacks.c
+src/score.c
+src/game.c
+src/preferences.c
+src/pixmaps.c
+src/gtktetcolor.desktop.in

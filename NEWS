@@ -1,0 +1,85 @@
+GtkTetcolor 0.6.4   (May 25 2004)
+=================
+ o fixed compilation by gcc-3.4
+ o updated intltool version which fixes configuring without OrigTree 
+   perl module
+ o fixed loading of a current font into fontselection widget in the preferences 
+   dialog
+
+GtkTetcolor 0.6.3   (Mar 25 2004)
+=================
+ o ported to Gtk+-2.4
+
+GtkTetcolor 0.6.2   (Mar 12 2003)
+=================
+ o added experimental rpm-spec-file
+ o German translation
+
+GtkTetcolor 0.6.1   (Dec 19 2002)
+=================
+ o ported to win32
+ o minor bug and portability fixes
+
+GtkTetcolor 0.6.0   (Nov 21 2002)
+=================
+ o fixed memory leak in changing of font
+ o code was cleaned up
+
+GtkTetcolor 0.6.0pre1 (Nov 10 2002)
+=====================
+ o ported to Gtk2/GNOME2
+
+GtkTetcolor 0.5.2   (Mar 4 2002)
+=================
+ o source code was cleaned, possible memory leaks on old Gnome were fixed
+ 
+GtkTetcolor 0.5.1   (Dec 6 2001)
+=================
+ o delay before cell destroying is now configurable
+ o score label is now displayed in various colors when current score lays in top ten
+ o bugfixes
+
+GtkTetcolor 0.5.0   (Apr 9 2001)
+=================
+ o sound support for GNOME version
+ o scores saving done using GNOME routines, non-compatible with previous versions
+ o minor bugfixes
+
+GtkTetcolor 0.4.3   (Aug 23 2000)
+=================
+ o fixed problem with visualization of left margin
+ o French translation
+
+GtkTetcolor 0.4.2   (Aug 16 2000)
+=================
+ o timer 
+ o dialogs were gnomified (for GNOME version)
+ o bugfixes
+
+GtkTetcolor 0.4.1   (Aug 11 2000)
+=================
+ o Font selection for labels 
+
+GtkTetcolor 0.4.0   (Aug 4 2000)
+=================
+ o GNOME support (optional)
+ o changed formula for bonus points
+
+GtkTetcolor 0.3.1   (Mar 28 2000)
+=================
+ o Bug with long players names (more than 255 characters) fixed 
+ 
+GtkTetcolor 0.3     (Jan 27 2000)
+===============
+ o Removing of cells is slightly animated
+ o Made it possible to switch between numeric keypad and arrows keys
+ o Code cleanup
+
+GtkTetcolor 0.2     (Nov 25 1999)
+===============
+
+GtkTetcolor 0.1     (Jul 8 1999)
+===============
+
+First public release.
+ 
