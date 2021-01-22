@@ -2,17 +2,14 @@
 
 SUBDIRS = po src sounds
 
+ACLOCAL_AMFLAGS = -I m4
+
 EXTRA_DIST = \
-	autogen.sh\
-	gtktetcolor.soundlist\
-	pixmaps/pause.xpm\
-	pixmaps/scores.xpm\
-	pixmaps/README\
-	intltool-extract.in \
-	intltool-merge.in    \
-	intltool-update.in \
-	gtktetcolor.spec.in \
-	gtktetcolor.spec.in
+	autogen.sh \
+	gtktetcolor.soundlist \
+	pixmaps/pause.xpm \
+	pixmaps/scores.xpm \
+	pixmaps/README
 
 if use_gnome
 soundlist_DATA = gtktetcolor.soundlist

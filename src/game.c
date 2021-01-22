@@ -639,16 +639,7 @@ void
 check_lines (GtkWidget * widget)
 {
   gint i, j;
-#ifdef HAVE_NANOSLEEP
-/*  const struct timespec delay_time = { 0, 50000000 }; */
-  struct timespec delay_time;
-  struct timespec remain_time;
-
-  delay_time.tv_sec = 0;
-  delay_time.tv_nsec = destroy_delay * 1000000;
-#else
   gulong delay_time = destroy_delay * 1000;
-#endif
 
   lines = 0;
   bonus = 0;
@@ -667,11 +658,7 @@ check_lines (GtkWidget * widget)
     }
     redraw_cells ();		/* Why it does not want to work first time ? */
     redraw_all_cells ();
-#ifdef HAVE_NANOSLEEP
-    nanosleep (&delay_time, &remain_time);
-#else
     g_usleep (delay_time);
-#endif
     remove_cells ();
   }
   if (lines > 1) {
