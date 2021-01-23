@@ -21,12 +21,7 @@
 #  include <config.h>
 #endif
 
-#ifdef USE_GNOME
-# include <gnome.h>
-# include <gconf/gconf-client.h>
-#else
-# include <gtk/gtk.h>
-#endif
+#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
 #include <gdk/gdkkeysyms.h>
@@ -43,12 +38,11 @@
 #include "pixmaps.h"
 
 gint cell_width, left_margin, initial_level, use_graykeys, destroy_delay;
-#ifdef USE_GNOME
+///#ifdef USE_GNOME
 gboolean sound_on;
-extern GConfClient *gconf_client;
-#else
+///#else
 gboolean text_toolbar;
-#endif
+///#endif
 gint nav_keys[4], alt_nav_keys[4];
 GtkStyle *label_style;
 gchar *font_name;
@@ -56,14 +50,12 @@ gchar *label_name[MAX_LABEL];	/* Label identifiers */
 
 gboolean preferences_changed;
 
-#ifndef USE_GNOME
 static char * get_pref_file_path (void)
 { // returns a string that must be freed
   const char * home_dir = g_getenv ("HOME");
   gchar *rcfile_path = g_strconcat (home_dir, G_DIR_SEPARATOR_S, ".gtktetcolorrc", NULL);
   return (rcfile_path);
 }
-#endif
 
 void
 change_preferences (GtkWidget * widget)
@@ -205,36 +197,6 @@ load_preferences ()
 {
   int temp;
 
-#ifdef USE_GNOME
-  temp =
-    gconf_client_get_int (gconf_client, "/apps/gtktetcolor/Options/cell_size",
-			  NULL);
-  if (temp >= 10 && temp <= MAX_CELL_SIZE)
-    cell_width = temp;
-  temp =
-    gconf_client_get_int (gconf_client,
-			  "/apps/gtktetcolor/Options/initial_level", NULL);
-  if (temp >= 1 && temp <= 9)
-    initial_level = temp;
-  temp =
-    gconf_client_get_bool (gconf_client,
-			   "/apps/gtktetcolor/Options/use_graykeys", NULL);
-  if (temp == 1 || temp == 0)
-    use_graykeys = temp;
-  temp =
-    gconf_client_get_bool (gconf_client, "/apps/gtktetcolor/Options/sound_on",
-			   NULL);
-  if (temp == 1 || temp == 0)
-    sound_on = temp;
-  temp =
-    gconf_client_get_int (gconf_client,
-			  "/apps/gtktetcolor/Options/destroy_delay", NULL);
-  if (temp > 0 && temp <= MAX_DESTROY_DELAY)
-    destroy_delay = temp;
-  font_name =
-    gconf_client_get_string (gconf_client, "/apps/gtktetcolor/Options/font",
-			     NULL);
-#else
   FILE *rcfile;
   char *rcfile_path = get_pref_file_path ();
   gchar *str;
@@ -327,28 +289,11 @@ load_preferences ()
   if (str)
     g_free (str);
 # endif
-#endif
 }				/* load_preferences */
 
 void
 save_preferences (void)
 {
-#ifdef USE_GNOME
-  gconf_client_set_int (gconf_client, "/apps/gtktetcolor/Options/cell_size",
-			cell_width, NULL);
-  gconf_client_set_int (gconf_client, "/apps/gtktetcolor/Options/initial_level",
-			initial_level, NULL);
-  gconf_client_set_bool (gconf_client, "/apps/gtktetcolor/Options/use_graykeys",
-			 use_graykeys, NULL);
-  gconf_client_set_bool (gconf_client, "/apps/gtktetcolor/Options/sound_on",
-			 sound_on, NULL);
-  gconf_client_set_int (gconf_client, "/apps/gtktetcolor/Options/destroy_delay",
-			destroy_delay, NULL);
-  if (font_name)
-    gconf_client_set_string (gconf_client, "/apps/gtktetcolor/Options/font",
-			     font_name, NULL);
-  gconf_client_suggest_sync (gconf_client, NULL);
-#else
   FILE *rcfile;
   char *rcfile_path = get_pref_file_path ();
   rcfile = fopen (rcfile_path, "w");
@@ -367,5 +312,4 @@ save_preferences (void)
     fclose (rcfile);
   }
   g_free (rcfile_path);
-#endif
 }

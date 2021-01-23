@@ -24,22 +24,6 @@ AC_SUBST([GTK_LIBS])
 
 #========================================================================
 
-gnome=yes
-AC_ARG_ENABLE([gnome],
-[  --disable-gnome         disable use of gnome],
-	[gnome=$enableval], [gnome=yes])
-
-if test "$gnome" = yes; then
-  PKG_CHECK_MODULES(GNOME, libgnomeui-2.0 >= 2.0.0 gconf-2.0 >= 1.2.0, [
-    AC_DEFINE(USE_GNOME,[] ,[Gnome use])
-  ], gnome=no)
-fi
-AM_CONDITIONAL(use_gnome, test x$gnome = xyes)
-AC_SUBST(GNOME_CFLAGS)
-AC_SUBST(GNOME_LIBS)
-
-#========================================================================
-
 case "$CC" in
    gcc*) CPPFLAGS="$CPPFLAGS -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers" ;;
    *) ;;

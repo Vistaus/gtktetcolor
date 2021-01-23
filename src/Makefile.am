@@ -7,7 +7,7 @@ icon_DATA = gtktetcolor.xpm
 
 AM_CPPFLAGS = \
 	-DDATADIR=\"$(datadir)\" -DLOCALEDIR=\"$(datadir)/locale\" \
-	@GTK_CFLAGS@ @GNOME_CFLAGS@
+	@GTK_CFLAGS@
 
 bin_PROGRAMS = gtktetcolor
 
@@ -20,4 +20,4 @@ gtktetcolor_SOURCES = \
 	game.c\
 	pixmaps.c
 
-gtktetcolor_LDADD = @GTK_LIBS@ @GNOME_LIBS@
+gtktetcolor_LDADD = @GTK_LIBS@

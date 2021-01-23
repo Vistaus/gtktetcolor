@@ -21,11 +21,7 @@
 #  include <config.h>
 #endif
 
-#ifdef USE_GNOME
-# include <gnome.h>
-#else
-# include <gtk/gtk.h>
-#endif
+#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <string.h>
 #include <stdlib.h>
@@ -208,15 +204,15 @@ game_over (GtkWidget * widget)
     (GtkWidget *) g_object_get_data (G_OBJECT (main_window), label_name[0]);
   gtk_label_set_text (GTK_LABEL (bonus_label), _("Game over"));
 
-#ifdef USE_GNOME
-  if (sound_on)
-    gnome_triggers_do ("", NULL, "gtktetcolor", "gameover", NULL);
-  pos = gnome_score_log ((gfloat) score, NULL, TRUE);
-  if (pos <= 10 && pos >= 1)
-    gnome_scores_display (_("Gtktetcolor"), "gtktetcolor", NULL, pos);
-#else
+///#ifdef USE_GNOME
+///  if (sound_on)
+///    gnome_triggers_do ("", NULL, "gtktetcolor", "gameover", NULL);
+///  pos = gnome_score_log ((gfloat) score, NULL, TRUE);
+///  if (pos <= 10 && pos >= 1)
+///    gnome_scores_display (_("Gtktetcolor"), "gtktetcolor", NULL, pos);
+///#endif
   insert_new_score ();
-#endif
+
 }
 
 gboolean
@@ -322,28 +318,20 @@ timeout_callback (gpointer window)
   nocolor:
     statusbar =
       (GtkWidget *) g_object_get_data (G_OBJECT (window), "statusbar1");
-#ifdef USE_GNOME
-    gnome_appbar_pop (GNOME_APPBAR (statusbar));
-#else
     gtk_statusbar_pop (GTK_STATUSBAR (statusbar), 1);
-#endif
     status_score = g_strdup (_("Score"));
     status_text = g_malloc (strlen (status_score) + 1 + 10 + 1);
     strcpy (status_text, status_score);
     strcat (status_text, " ");
     strcat (status_text, score_text);
-#ifdef USE_GNOME
-    gnome_appbar_push (GNOME_APPBAR (statusbar), status_text);
-#else
     gtk_statusbar_push (GTK_STATUSBAR (statusbar), 1, status_text);
-#endif
     g_free (status_score);
     g_free (status_text);
     if (bonus) {
-#ifdef USE_GNOME
-      if (sound_on)
-	gnome_triggers_do ("", NULL, "gtktetcolor", "bonus", NULL);
-#endif
+///#ifdef USE_GNOME
+///      if (sound_on)
+///	gnome_triggers_do ("", NULL, "gtktetcolor", "bonus", NULL);
+///#endif
       bonus_tic = 0;
       g_snprintf (bonus_text, 10, "%d", bonus);
       bonus_label_number =
@@ -354,10 +342,10 @@ timeout_callback (gpointer window)
       gtk_label_set_text (GTK_LABEL (bonus_label_number), bonus_text);
       gtk_label_set_text (GTK_LABEL (bonus_label), _("Bonus"));
     }
-#ifdef USE_GNOME
-    else if (sound_on && lines == 1)
-      gnome_triggers_do ("", NULL, "gtktetcolor", "linerem", NULL);
-#endif
+///#ifdef USE_GNOME
+///    else if (sound_on && lines == 1)
+///      gnome_triggers_do ("", NULL, "gtktetcolor", "linerem", NULL);
+///#endif
     new_block ();
     redraw_cells ();
     return FALSE; 

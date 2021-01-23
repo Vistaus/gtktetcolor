@@ -21,12 +21,7 @@
 #  include <config.h>
 #endif
 
-#ifdef USE_GNOME
-# include <gnome.h>
-# include <gconf/gconf-client.h>
-#else
-# include <gtk/gtk.h>
-#endif
+#include <gtk/gtk.h>
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
@@ -56,12 +51,11 @@ gint use_graykeys =  1;
 gint use_graykeys =  0; 
 #endif
 
-#ifdef USE_GNOME
+///#ifdef USE_GNOME
 gboolean sound_on = 0;
-GConfClient *gconf_client = NULL;
-#else
+///#else
 gboolean text_toolbar = 0;
-#endif
+///#endif
 gint nav_keys[4], alt_nav_keys[4];
 gchar *font_name;
 
@@ -82,20 +76,7 @@ main (int argc, char *argv[])
   textdomain (GETTEXT_PACKAGE);
 #endif
 
-#ifdef USE_GNOME
-  gnome_program_init (PACKAGE, VERSION, LIBGNOMEUI_MODULE,
-		      argc, argv, GNOME_PARAM_APP_DATADIR, DATADIR, NULL);
-  gconf_client = gconf_client_get_default ();
-  gconf_client_add_dir (gconf_client, "/apps/gtktetcolor/Option",
-			GCONF_CLIENT_PRELOAD_NONE, NULL);
-/*
-  gconf_client_notify_add (gconf_client, "/apps/gtktetcolor/Option",                          
-    key_changed_callback, NULL, NULL, NULL);                                                        
-  */
-
-#else
   gtk_init (&argc, &argv);
-#endif
 
   load_preferences ();
 
@@ -135,9 +116,6 @@ main (int argc, char *argv[])
   before_exit ();
   if (icon_xpm)
     g_object_unref (G_OBJECT (icon_xpm));
-#ifdef USE_GNOME
-  g_object_unref (G_OBJECT (gconf_client));
-#endif
   return 0;
 }
 

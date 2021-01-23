@@ -21,11 +21,7 @@
 #  include <config.h>
 #endif
 
-#ifdef USE_GNOME
-# include <gnome.h>
-#else
-# include <gtk/gtk.h>
-#endif
+#include <gtk/gtk.h>
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>

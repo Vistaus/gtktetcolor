@@ -21,11 +21,7 @@
 #  include <config.h>
 #endif
 
-#ifdef USE_GNOME
-# include <gnome.h>
-#else
-# include <gtk/gtk.h>
-#endif
+#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
 #include <gdk/gdkkeysyms.h>
@@ -41,11 +37,11 @@
 #include "pixmaps.h"
 
 gint cell_width, left_margin, initial_level, use_graykeys;
-#ifdef USE_GNOME
+///#ifdef USE_GNOME
 gboolean sound_on;
-#else
+///#else
 gboolean text_toolbar;
-#endif
+///#endif
 gint nav_keys[4], alt_nav_keys[4];
 GtkStyle *label_style;
 GdkFont *font;
@@ -259,7 +255,7 @@ on_graykeys_radiobutton_clicked (GtkButton * button, gpointer user_data)
   preferences_changed = TRUE;
 }
 
-#ifdef USE_GNOME
+///#ifdef USE_GNOME
 void
 on_sound_checkbutton_toggled (GtkToggleButton * togglebutton,
 			      gpointer user_data)
@@ -267,7 +263,7 @@ on_sound_checkbutton_toggled (GtkToggleButton * togglebutton,
   sound_on = !sound_on;
   preferences_changed = TRUE;
 }
-#else
+///#else
 void
 on_text_toolbar_checkbutton_toggled (GtkToggleButton * togglebutton,
 				     gpointer user_data)
@@ -282,4 +278,4 @@ on_text_toolbar_checkbutton_toggled (GtkToggleButton * togglebutton,
   else
     gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_ICONS);
 }
-#endif
+///#endif

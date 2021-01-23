@@ -30,27 +30,21 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
-#ifdef USE_GNOME
-#include <gnome.h>
-#endif
-
 #include "callbacks.h"
 #include "interface.h"
 #include "main.h"
 #include "score.h"
 #include "preferences.h"
 
-#ifndef USE_GNOME
 #include "../pixmaps/scores.xpm"
 #include "../pixmaps/pause.xpm"
-#endif
 
 gint cell_width, initial_level, use_graykeys, destroy_delay;
-#ifdef USE_GNOME
+///#ifdef USE_GNOME
 gboolean sound_on;
-#else
+///#else
 gboolean text_toolbar;
-#endif
+///#endif
 GtkStyle *label_style;
 gchar *font_name;
 GdkPixbuf *icon_xpm;
@@ -67,56 +61,6 @@ gchar *label_name[MAX_LABEL] = { "bonus_label",
   "empty_label"			/* for proper visualization of left margin vbox */
 };
 
-#ifdef USE_GNOME
-static GnomeUIInfo Game_menu_uiinfo[] = {
-  GNOMEUIINFO_MENU_NEW_GAME_ITEM (on_new_activate, NULL),
-  {
-   GNOME_APP_UI_ITEM, N_("_Pause"),
-   N_("Pause game"),
-   on_pause_activate, NULL, NULL,
-   GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_TIMER_STOP,
-   GDK_P, 0, NULL},
-  GNOMEUIINFO_MENU_SCORES_ITEM (on_scores_activate, NULL),
-  GNOMEUIINFO_MENU_PREFERENCES_ITEM (on_preferences_activate, NULL),
-  GNOMEUIINFO_MENU_EXIT_ITEM (on_quit_activate, NULL),
-  GNOMEUIINFO_END
-};
-
-static GnomeUIInfo Help_menu_uiinfo[] = {
-  {
-   GNOME_APP_UI_ITEM, N_("on keys"),
-   N_("Help on keys"),
-   help_on_keys_activate, NULL, NULL,
-   GNOME_APP_PIXMAP_NONE, NULL,
-   0, 0, NULL},
-  GNOMEUIINFO_MENU_ABOUT_ITEM (create_about_dialog, NULL),
-  GNOMEUIINFO_END
-};
-
-static GnomeUIInfo menubar1_uiinfo[] = {
-  GNOMEUIINFO_MENU_GAME_TREE (Game_menu_uiinfo),
-  GNOMEUIINFO_MENU_HELP_TREE (Help_menu_uiinfo),
-  GNOMEUIINFO_END
-};
-
-static GnomeUIInfo toolbar[] = {
-  GNOMEUIINFO_ITEM_STOCK (N_("New"), N_("New game"), on_new_activate,
-			  GTK_STOCK_NEW),
-  GNOMEUIINFO_ITEM_STOCK (N_("Scores"), N_("Top scores"),
-			  on_scores_activate,
-			  GNOME_STOCK_SCORES),
-  GNOMEUIINFO_ITEM_STOCK (N_("Pause"), N_("Pause game"),
-			  on_pause_activate,
-			  GNOME_STOCK_TIMER_STOP),
-  GNOMEUIINFO_ITEM_STOCK (N_("Props"), N_("Preferences"),
-			  on_preferences_activate,
-			  GTK_STOCK_PROPERTIES),
-  GNOMEUIINFO_ITEM_STOCK (N_("Quit"), N_("Quit game"), on_quit_activate,
-			  GTK_STOCK_QUIT),
-
-  GNOMEUIINFO_END
-};
-#else
 # ifdef ITEMFACTORY
 static GtkItemFactoryEntry menu_items[] = {
   {N_("/_Game"), NULL, 0, 0, "<Branch>"},
@@ -131,12 +75,10 @@ static GtkItemFactoryEntry menu_items[] = {
   {N_("/Help/_About"), NULL, create_about_dialog, 0, "<Item>", NULL}
 };
 # endif
-#endif
 
 GtkWidget *
 create_main_window (void)
 {
-#ifndef USE_GNOME
   GtkWidget *vbox1;
   GtkWidget *menubar1;
   GtkWidget *Game;
@@ -165,7 +107,6 @@ create_main_window (void)
 # ifdef ITEMFACTORY
   GtkItemFactory *item_factory;
 # endif
-#endif
   GtkWidget *working_hbox;
   GtkWidget *left_margin_vbox;
   GtkWidget *bonus_label;
@@ -181,17 +122,13 @@ create_main_window (void)
   GtkWidget *timer_label;
   GtkWidget *statusbar1;
 
-#ifdef USE_GNOME
-  main_window = gnome_app_new (PACKAGE, _("gtktetcolor"));
-#else
   accel_group = gtk_accel_group_new ();
 
   main_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-#endif
+
   gtk_window_set_title (GTK_WINDOW (main_window), _("gtktetcolor"));
   gtk_window_set_resizable (GTK_WINDOW (main_window), FALSE);
 
-#ifndef USE_GNOME
   vbox1 = gtk_vbox_new (FALSE, 0);
   gtk_widget_set_name (vbox1, "vbox1");
   g_object_ref (G_OBJECT (vbox1));
@@ -199,16 +136,6 @@ create_main_window (void)
 			  (GDestroyNotify) g_object_unref);
   gtk_widget_show (vbox1);
   gtk_container_add (GTK_CONTAINER (main_window), vbox1);
-#endif
-
-#ifdef USE_GNOME
-  gnome_app_create_toolbar (GNOME_APP (main_window), toolbar);
-  gnome_app_create_menus (GNOME_APP (main_window), menubar1_uiinfo);
-  statusbar1 = gnome_appbar_new (FALSE, TRUE, GNOME_PREFERENCES_NEVER);
-  g_object_set_data (G_OBJECT (main_window), "statusbar1", statusbar1);
-  gnome_app_set_statusbar (GNOME_APP (main_window), statusbar1);
-  gnome_app_install_menu_hints (GNOME_APP (main_window), menubar1_uiinfo);
-#else
 
   gtktetcolor_factory = gtk_icon_factory_new ();
 
@@ -350,13 +277,10 @@ create_main_window (void)
   g_signal_connect (GTK_WIDGET (quit_button), "clicked",
 		    G_CALLBACK (on_quit_activate), NULL);
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar1), quit_button, -1);
-#endif
 
   working_hbox = gtk_hbox_new (FALSE, 0);
   gtk_widget_show (working_hbox);
-#ifndef USE_GNOME
   gtk_box_pack_start (GTK_BOX (vbox1), working_hbox, TRUE, TRUE, 0);
-#endif
 
   left_margin_vbox = gtk_vbox_new (FALSE, 5);
   gtk_widget_show (left_margin_vbox);
@@ -453,20 +377,18 @@ create_main_window (void)
 
   change_font_of_labels ();
 
-#ifndef USE_GNOME
   statusbar1 = gtk_statusbar_new ();
   g_object_ref (G_OBJECT (statusbar1));
   g_object_set_data_full (G_OBJECT (main_window), "statusbar1",
 			  statusbar1, (GDestroyNotify) g_object_unref);
   gtk_widget_show (statusbar1);
   gtk_box_pack_start (GTK_BOX (vbox1), statusbar1, FALSE, TRUE, 0);
-#endif
 
   g_signal_connect (G_OBJECT (main_window), "delete-event",
 		    G_CALLBACK (on_main_window_delete_event), NULL);
   g_signal_connect (G_OBJECT (main_window), "key-press-event",
 		    G_CALLBACK (on_main_window_key_press_event), NULL);
-#if !defined (USE_GNOME) && !defined (ITEMFACTORY)
+#if !defined (ITEMFACTORY)
   g_signal_connect (GTK_WIDGET (new), "activate",
 		    G_CALLBACK (on_new_activate), NULL);
   g_signal_connect (GTK_WIDGET (pause), "activate",
@@ -484,11 +406,9 @@ create_main_window (void)
 #endif
   g_signal_connect (G_OBJECT (drawingarea), "expose-event",
 		    G_CALLBACK (on_drawingarea_expose_event), NULL);
-#ifdef USE_GNOME
-  gnome_app_set_contents (GNOME_APP (main_window), working_hbox);
-#else
+
   gtk_window_add_accel_group (GTK_WINDOW (main_window), accel_group);
-#endif
+
   gtk_widget_grab_focus (drawingarea);
   gtk_widget_show_all (main_window);
   return main_window;
@@ -701,13 +621,13 @@ create_preferences_dialog (void)
   GtkWidget *fontselection;
   GtkWidget *fonts_label;
 
-#ifdef USE_GNOME
+///#ifdef USE_GNOME
   GtkWidget *sound_hbox;
   GtkWidget *sound_checkbutton;
-#else
+///#else
   GtkWidget *text_toolbar_hbox;
   GtkWidget *text_toolbar_checkbutton;
-#endif
+///#endif
 
   preferences_dialog =
     gtk_dialog_new_with_buttons (_("GtkTetcolor preferences"),
@@ -842,7 +762,7 @@ create_preferences_dialog (void)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (graykeys_radiobutton),
 				  TRUE);
 
-#ifdef USE_GNOME
+///#ifdef USE_GNOME
   sound_hbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (preferences_vbox), sound_hbox, FALSE, FALSE, 10);
 
@@ -861,7 +781,7 @@ create_preferences_dialog (void)
 
   g_signal_connect (G_OBJECT (sound_checkbutton), "toggled",
 		    G_CALLBACK (on_sound_checkbutton_toggled), NULL);
-#else
+///#else
   text_toolbar_hbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (preferences_vbox), text_toolbar_hbox, FALSE,
 		      FALSE, 10);
@@ -884,7 +804,7 @@ create_preferences_dialog (void)
 
   g_signal_connect (G_OBJECT (text_toolbar_checkbutton), "toggled",
 		    G_CALLBACK (on_text_toolbar_checkbutton_toggled), NULL);
-#endif
+///#endif
   g_signal_connect (G_OBJECT (numkeys_radiobutton), "clicked",
 		    G_CALLBACK (on_numkeys_radiobutton_clicked), NULL);
   g_signal_connect (G_OBJECT (graykeys_radiobutton), "clicked",
