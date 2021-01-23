@@ -152,13 +152,6 @@ create_main_window (void)
   GtkWidget *about;
   GtkWidget *toolbar1;
   GtkWidget *tmp_toolbar_icon;
-/*
-  GtkWidget *new_button;
-  GtkWidget *scores_button;
-  GtkWidget *pause_button;
-  GtkWidget *preferences_button;
-  GtkWidget *exit_button;
- */
   GtkToolItem *new_button;
   GtkToolItem *scores_button;
   GtkToolItem *pause_button;
@@ -255,9 +248,6 @@ create_main_window (void)
   Game_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (Game), Game_menu);
 
-/*
-  new = gtk_image_menu_item_new_from_stock (GTK_STOCK_NEW, accel_group);
- */
   new = gtk_image_menu_item_new_with_mnemonic (_("_New game"));
   gtk_widget_show (new);
   gtk_container_add (GTK_CONTAINER (Game_menu), new);
@@ -325,18 +315,12 @@ create_main_window (void)
   gtk_box_pack_start (GTK_BOX (vbox1), toolbar1, FALSE, TRUE, 0);
   tooltips = gtk_tooltips_new ();
 
-/*   tmp_toolbar_icon =
-    gtk_image_new_from_stock (GTK_STOCK_NEW, GTK_ICON_SIZE_LARGE_TOOLBAR); */
   new_button = gtk_tool_button_new_from_stock (GTK_STOCK_NEW);
-  /* gtk_toolbar_append_item (GTK_TOOLBAR (toolbar1), _("New"), _("New game"),
-     NULL, tmp_toolbar_icon,
-     G_CALLBACK (on_new_activate), NULL); */
   g_signal_connect (GTK_WIDGET (new_button), "clicked",
 		    G_CALLBACK (on_new_activate), NULL);
   gtk_tool_item_set_tooltip (new_button, tooltips, _("New game"), NULL);
   gtk_tool_button_set_label (GTK_TOOL_BUTTON (new_button), _("New game"));
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar1), new_button, -1);
-/*  gtk_widget_show (new_button); */
 
   scores_button = gtk_tool_button_new_from_stock ("gnome-stock-scores");
   gtk_tool_item_set_tooltip (scores_button, tooltips, _("Scores"),
@@ -375,12 +359,6 @@ create_main_window (void)
 #endif
 
   left_margin_vbox = gtk_vbox_new (FALSE, 5);
-/* 
-  g_object_ref (G_OBJECT (left_margin_vbox));
-  g_object_set_data_full (G_OBJECT (main_window), "left_margin_vbox",
-			    left_margin_vbox,
-			    (GDestroyNotify) g_object_unref);
- */
   gtk_widget_show (left_margin_vbox);
   gtk_box_pack_start (GTK_BOX (working_hbox), left_margin_vbox, TRUE, TRUE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (left_margin_vbox), 10);
@@ -439,23 +417,12 @@ create_main_window (void)
   gtk_box_pack_end (GTK_BOX (left_margin_vbox), empty_label, FALSE, FALSE, 0);
 
   drawingarea = gtk_drawing_area_new ();
-/* 
-  g_object_ref (G_OBJECT (drawingarea));
-  g_object_set_data_full (G_OBJECT (main_window), "drawingarea",
-			    drawingarea, (GDestroyNotify) g_object_unref);
- */
   gtk_widget_show (drawingarea);
   gtk_box_pack_start (GTK_BOX (working_hbox), drawingarea, TRUE, TRUE, 0);
   gtk_widget_set_size_request (drawingarea, X_SIZE * cell_width + 2 * border,
 			       Y_SIZE * cell_width + 2 * border);
 
   right_margin_vbox = gtk_vbox_new (FALSE, 5);
-/* 
-  g_object_ref (G_OBJECT (right_margin_vbox));
-  g_object_set_data_full (G_OBJECT (main_window), "right_margin_vbox",
-			    right_margin_vbox,
-			    (GDestroyNotify) g_object_unref);
- */
   gtk_widget_show (right_margin_vbox);
   gtk_box_pack_start (GTK_BOX (working_hbox), right_margin_vbox, TRUE, TRUE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (right_margin_vbox), 10);
@@ -535,35 +502,10 @@ create_about_dialog (void)
     "<panov@canopus.iacp.dvo.ru>",
     NULL
   };
-/*
-  const gchar *documenters[] = {
-    NULL
-  };
- */
-
   const gchar *translator_credits = _("translator_credits");
 
 
   GtkWidget *dialog;
-
-/*
-  dialog = gnome_about_new ("gtktetcolor", VERSION,
-			    _("(C) 1999-2004"),
-			    _("This program is covered by the GNU GPL"),
-			    authors,
-			    documenters,
-			    strcmp (translator_credits,
-				    "translator_credits") !=
-			    0 ? translator_credits : NULL, icon_xpm);
-  gtk_show_about_dialog (GTK_WINDOW (main_window), "authors", authors,
-                         "comments", _("This program is covered by the GNU GPL"),
-			 "copyright", "(C) 1999-2004", 
-//			 "translator-credits", translator_credits,
-//				                       "translator_credits") !=
-//			 0 ? translator_credits : NULL, 
-			 "version", VERSION,
-			 "website", "http://canopus.iacp.dvo.ru/~panov/gtktetcolor/");
- */
   dialog = gtk_about_dialog_new ();
   gtk_about_dialog_set_name (GTK_ABOUT_DIALOG (dialog), "gtktetcolor");
   gtk_about_dialog_set_version (GTK_ABOUT_DIALOG (dialog), VERSION);
