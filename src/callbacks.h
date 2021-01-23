@@ -73,7 +73,3 @@ void on_fontsel_button_clicked (GtkButton * button, gpointer user_data);
 void
 on_sound_checkbutton_toggled (GtkToggleButton * togglebutton,
 			      gpointer user_data);
-
-void
-on_text_toolbar_checkbutton_toggled (GtkToggleButton * togglebutton,
-				     gpointer user_data);

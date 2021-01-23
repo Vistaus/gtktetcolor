@@ -40,8 +40,6 @@
 gint cell_width, left_margin, initial_level, use_graykeys, destroy_delay;
 ///#ifdef USE_GNOME
 gboolean sound_on;
-///#else
-gboolean text_toolbar;
 ///#endif
 gint nav_keys[4], alt_nav_keys[4];
 GtkStyle *label_style;
@@ -247,11 +245,6 @@ load_preferences ()
 	if (temp >= 0 && temp <= MAX_DESTROY_DELAY)
 	  destroy_delay = temp;
       }
-      else if (strcmp (str, "text_toolbar") == 0) {
-	fscanf (rcfile, "%d ", &temp);
-	if (temp == 1 || temp == 0)
-	  text_toolbar = temp;
-      }
       else if (strcmp (str, "font") == 0) {
 	fscanf (rcfile, "%d ", &temp);
 	if (temp > 0) {
@@ -305,7 +298,6 @@ save_preferences (void)
     fprintf (rcfile, "initial_level %d\n", initial_level);
     fprintf (rcfile, "use_graykeys %d\n", use_graykeys);
     fprintf (rcfile, "destroy_delay %d\n", destroy_delay);
-    fprintf (rcfile, "text_toolbar %d\n", text_toolbar);
     if (font_name)
       fprintf (rcfile, "font %d %s\n", strlen (font_name), font_name);
 

@@ -39,8 +39,6 @@
 gint cell_width, left_margin, initial_level, use_graykeys;
 ///#ifdef USE_GNOME
 gboolean sound_on;
-///#else
-gboolean text_toolbar;
 ///#endif
 gint nav_keys[4], alt_nav_keys[4];
 GtkStyle *label_style;
@@ -262,20 +260,5 @@ on_sound_checkbutton_toggled (GtkToggleButton * togglebutton,
 {
   sound_on = !sound_on;
   preferences_changed = TRUE;
-}
-///#else
-void
-on_text_toolbar_checkbutton_toggled (GtkToggleButton * togglebutton,
-				     gpointer user_data)
-{
-  GtkWidget *toolbar;
-
-  text_toolbar = !text_toolbar;
-  preferences_changed = TRUE;
-  toolbar = (GtkWidget *) g_object_get_data (G_OBJECT (main_window), "toolbar");
-  if (text_toolbar)
-    gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_BOTH);
-  else
-    gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_ICONS);
 }
 ///#endif

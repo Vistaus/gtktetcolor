@@ -42,8 +42,6 @@
 gint cell_width, initial_level, use_graykeys, destroy_delay;
 ///#ifdef USE_GNOME
 gboolean sound_on;
-///#else
-gboolean text_toolbar;
 ///#endif
 GtkStyle *label_style;
 gchar *font_name;
@@ -92,14 +90,7 @@ create_main_window (void)
   GtkWidget *Help_menu;
   GtkWidget *on_keys;
   GtkWidget *about;
-  GtkWidget *toolbar1;
   GtkWidget *tmp_toolbar_icon;
-  GtkToolItem *new_button;
-  GtkToolItem *scores_button;
-  GtkToolItem *pause_button;
-  GtkToolItem *preferences_button;
-  GtkToolItem *quit_button;
-  GtkTooltips *tooltips;
   GtkAccelGroup *accel_group;
   GtkIconFactory *gtktetcolor_factory;
   GtkIconSet *tmp_iconset;
@@ -231,52 +222,6 @@ create_main_window (void)
     gtk_image_new_from_stock (GTK_STOCK_ABOUT, GTK_ICON_SIZE_MENU);
   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (about), tmp_toolbar_icon);
 # endif
-
-  toolbar1 = gtk_toolbar_new ();
-  g_object_set_data (G_OBJECT (main_window), "toolbar", toolbar1);
-  if (text_toolbar)
-    gtk_toolbar_set_style (GTK_TOOLBAR (toolbar1), GTK_TOOLBAR_BOTH);
-  else
-    gtk_toolbar_set_style (GTK_TOOLBAR (toolbar1), GTK_TOOLBAR_ICONS);
-  gtk_widget_show (toolbar1);
-  gtk_box_pack_start (GTK_BOX (vbox1), toolbar1, FALSE, TRUE, 0);
-  tooltips = gtk_tooltips_new ();
-
-  new_button = gtk_tool_button_new_from_stock (GTK_STOCK_NEW);
-  g_signal_connect (GTK_WIDGET (new_button), "clicked",
-		    G_CALLBACK (on_new_activate), NULL);
-  gtk_tool_item_set_tooltip (new_button, tooltips, _("New game"), NULL);
-  gtk_tool_button_set_label (GTK_TOOL_BUTTON (new_button), _("New game"));
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar1), new_button, -1);
-
-  scores_button = gtk_tool_button_new_from_stock ("gnome-stock-scores");
-  gtk_tool_item_set_tooltip (scores_button, tooltips, _("Scores"),
-			     _("top scores"));
-  gtk_tool_button_set_label (GTK_TOOL_BUTTON (scores_button), _("Scores"));
-  g_signal_connect (GTK_WIDGET (scores_button), "clicked",
-		    G_CALLBACK (on_scores_activate), NULL);
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar1), scores_button, -1);
-
-  pause_button = gtk_tool_button_new_from_stock ("gnome-stock-timer-stop");
-  gtk_tool_item_set_tooltip (pause_button, tooltips, _("Pause game"),
-			     _("Temporarily stop the game"));
-  gtk_tool_button_set_label (GTK_TOOL_BUTTON (pause_button), _("Pause"));
-  g_signal_connect (GTK_WIDGET (pause_button), "clicked",
-		    G_CALLBACK (on_pause_activate), NULL);
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar1), pause_button, -1);
-
-  preferences_button = gtk_tool_button_new_from_stock (GTK_STOCK_PREFERENCES);
-  gtk_tool_item_set_tooltip (preferences_button, tooltips, _("Preferences"),
-			     NULL);
-  g_signal_connect (GTK_WIDGET (preferences_button), "clicked",
-		    G_CALLBACK (on_preferences_activate), NULL);
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar1), preferences_button, -1);
-
-  quit_button = gtk_tool_button_new_from_stock (GTK_STOCK_QUIT);
-  gtk_tool_item_set_tooltip (quit_button, tooltips, _("Quit game"), NULL);
-  g_signal_connect (GTK_WIDGET (quit_button), "clicked",
-		    G_CALLBACK (on_quit_activate), NULL);
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar1), quit_button, -1);
 
   working_hbox = gtk_hbox_new (FALSE, 0);
   gtk_widget_show (working_hbox);
@@ -624,9 +569,6 @@ create_preferences_dialog (void)
 ///#ifdef USE_GNOME
   GtkWidget *sound_hbox;
   GtkWidget *sound_checkbutton;
-///#else
-  GtkWidget *text_toolbar_hbox;
-  GtkWidget *text_toolbar_checkbutton;
 ///#endif
 
   preferences_dialog =
@@ -781,29 +723,6 @@ create_preferences_dialog (void)
 
   g_signal_connect (G_OBJECT (sound_checkbutton), "toggled",
 		    G_CALLBACK (on_sound_checkbutton_toggled), NULL);
-///#else
-  text_toolbar_hbox = gtk_hbox_new (FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (preferences_vbox), text_toolbar_hbox, FALSE,
-		      FALSE, 10);
-
-  text_toolbar_checkbutton =
-    gtk_check_button_new_with_label (_("Show text in toolbar"));
-  g_object_ref (G_OBJECT (text_toolbar_checkbutton));
-  g_object_set_data_full (G_OBJECT (preferences_dialog),
-			  "text_toolbar_checkbutton", text_toolbar_checkbutton,
-			  (GDestroyNotify) g_object_unref);
-  gtk_box_pack_start (GTK_BOX (text_toolbar_hbox), text_toolbar_checkbutton,
-		      FALSE, FALSE, 10);
-
-  if (text_toolbar)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (text_toolbar_checkbutton),
-				  TRUE);
-  else
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (text_toolbar_checkbutton),
-				  FALSE);
-
-  g_signal_connect (G_OBJECT (text_toolbar_checkbutton), "toggled",
-		    G_CALLBACK (on_text_toolbar_checkbutton_toggled), NULL);
 ///#endif
   g_signal_connect (G_OBJECT (numkeys_radiobutton), "clicked",
 		    G_CALLBACK (on_numkeys_radiobutton_clicked), NULL);
