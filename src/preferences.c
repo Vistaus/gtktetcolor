@@ -56,6 +56,15 @@ gchar *label_name[MAX_LABEL];	/* Label identifiers */
 
 gboolean preferences_changed;
 
+#ifndef USE_GNOME
+static char * get_pref_file_path (void)
+{ // returns a string that must be freed
+  const char * home_dir = g_getenv ("HOME");
+  gchar *rcfile_path = g_strconcat (home_dir, G_DIR_SEPARATOR_S, ".gtktetcolorrc", NULL);
+  return (rcfile_path);
+}
+#endif
+
 void
 change_preferences (GtkWidget * widget)
 {
@@ -195,6 +204,7 @@ void
 load_preferences ()
 {
   int temp;
+
 #ifdef USE_GNOME
   temp =
     gconf_client_get_int (gconf_client, "/apps/gtktetcolor/Options/cell_size",
@@ -226,6 +236,7 @@ load_preferences ()
 			     NULL);
 #else
   FILE *rcfile;
+  char *rcfile_path = get_pref_file_path ();
   gchar *str;
   int i;
 # ifdef HAVE_GETLINE
@@ -242,9 +253,9 @@ load_preferences ()
   str = (gchar *) g_malloc (20);
 # endif
   rcfile = fopen (rcfile_path, "r");
-  if (rcfile == NULL)
+  if (rcfile == NULL) {
     g_print ("\ncannot open rc file for reading\n");
-  else {
+  } else {
     for (i = 0; !feof (rcfile) && i <= 5; i++) {
 # if defined HAVE_GETDELIM
       n = 0;
@@ -309,7 +320,9 @@ load_preferences ()
 	free (str1);
 # endif
     }
+    fclose (rcfile);
   }
+  g_free (rcfile_path);
 # if !defined HAVE_GETDELIM
   if (str)
     g_free (str);
@@ -337,10 +350,12 @@ save_preferences (void)
   gconf_client_suggest_sync (gconf_client, NULL);
 #else
   FILE *rcfile;
+  char *rcfile_path = get_pref_file_path ();
   rcfile = fopen (rcfile_path, "w");
-  if (rcfile == NULL)
+
+  if (rcfile == NULL) {
     g_print ("\ncannot open rc file for writing\n");
-  else {
+  } else {
     fprintf (rcfile, "cell_size %d\n", cell_width);
     fprintf (rcfile, "initial_level %d\n", initial_level);
     fprintf (rcfile, "use_graykeys %d\n", use_graykeys);
@@ -348,7 +363,9 @@ save_preferences (void)
     fprintf (rcfile, "text_toolbar %d\n", text_toolbar);
     if (font_name)
       fprintf (rcfile, "font %d %s\n", strlen (font_name), font_name);
+
     fclose (rcfile);
   }
+  g_free (rcfile_path);
 #endif
 }

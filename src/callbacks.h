@@ -42,19 +42,7 @@ gboolean
 on_main_window_key_press_event (GtkWidget * widget,
 				GdkEventKey * event, gpointer user_data);
 
-#ifdef USE_GNOME
-/*
-void
-scores_dialog_clicked (GnomeDialog * dialog,
-                       gint button, 
-		       gpointer user_data);
-
-void
-scores_dialog_close (GnomeDialog *dialog, gpointer user_data);
- */
-#else
 void on_name_response (GtkObject * obj, gpointer user_data);
-#endif
 
 void on_pause_response (GtkObject * param, gpointer user_data);
 

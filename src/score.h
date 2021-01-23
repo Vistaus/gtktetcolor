@@ -19,19 +19,10 @@
 
 #include <stdio.h>                                                              
 
-#ifndef USE_GNOME  
-FILE *score_file;
-gchar *score_path;
-gchar *rcfile_path;
 gint name_i;
 
 gboolean read_score (void);
-
-gboolean choose_score_file (void);
-
 gboolean insert_new_score (void);
-
 gboolean write_score (void);
 
 gint check_line (gint i);
-#endif

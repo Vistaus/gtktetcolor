@@ -62,12 +62,6 @@ init_game (GtkWidget * widget)
   gint i, j;
   GtkWidget *max_score_number_label;
   gchar max_score_text[10];
-#ifdef USE_GNOME
-  gfloat *fscore = NULL;
-  gchar **names = NULL;
-  time_t *scoretimes = NULL;
-  gint top;
-#endif
 
   level = initial_level;
   lines = 0;
@@ -77,24 +71,10 @@ init_game (GtkWidget * widget)
   bonus_tic = 0;
   interval = INI_INTERVAL;
   current_score_number = 10;	/* 11th position in top ten */
-#ifndef USE_GNOME
+
   read_score ();
   max_score = saved_score[0];
-#else
-  top =
-    gnome_score_get_notable ("gtktetcolor", NULL, &names, &fscore, &scoretimes);
-  if (top > 0) {
-    if (fscore != NULL)
-      max_score = (gint) fscore[0];
-    for (i = 0; i < top; ++i)
-      saved_score[i] = (gint) fscore[i];
-    g_strfreev (names);
-    g_free (fscore);
-    g_free (scoretimes);
-  }
-  for (i = top; i < 10; ++i)
-    saved_score[i] = 0;
-#endif
+
   max_score_number_label =
     (GtkWidget *) g_object_get_data (G_OBJECT (main_window), label_name[7]);
   g_snprintf (max_score_text, 10, "%d", max_score);

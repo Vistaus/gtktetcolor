@@ -76,10 +76,6 @@ main (int argc, char *argv[])
 {
 #include "gtktetcolor.xpm"
 
-#ifdef USE_GNOME
-  gnome_score_init ("gtktetcolor");
-#endif
-
 #ifdef ENABLE_NLS
   bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
@@ -101,9 +97,6 @@ main (int argc, char *argv[])
   gtk_init (&argc, &argv);
 #endif
 
-#ifndef USE_GNOME
-  choose_score_file ();
-#endif
   load_preferences ();
 
   main_window = create_main_window ();

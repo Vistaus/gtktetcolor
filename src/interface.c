@@ -579,7 +579,7 @@ create_about_dialog (void)
   gtk_widget_show_all (dialog);
 }
 
-#ifndef USE_GNOME
+
 void
 create_scores_dialog (void)
 {
@@ -666,7 +666,7 @@ create_name_dialog (void)
   gtk_widget_grab_focus (name_entry);
   gtk_widget_show_all (dialog);
 }
-#endif
+
 
 void
 create_pause_dialog (void)

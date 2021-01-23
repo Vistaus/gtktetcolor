@@ -74,11 +74,7 @@ on_new_activate (GtkWidget * menuitem, gpointer user_data)
 void
 on_scores_activate (GtkWidget * menuitem, gpointer user_data)
 {
-#ifdef USE_GNOME
-  gnome_scores_display (N_("Gtktetcolor"), "gtktetcolor", NULL, 0);
-#else
   create_scores_dialog ();
-#endif
 }
 
 
@@ -133,7 +129,7 @@ on_main_window_key_press_event (GtkWidget * widget,
   return FALSE;
 }
 
-#ifndef USE_GNOME
+
 void
 on_name_response (GtkObject * obj, gpointer user_data)
 {
@@ -158,11 +154,10 @@ on_name_response (GtkObject * obj, gpointer user_data)
 
   strcpy (name[name_i], new_name);
   saved_score[name_i] = score;
-  choose_score_file ();
   write_score ();
   gtk_widget_destroy ((GtkWidget *) obj);
 }
-#endif
+
 
 void
 on_pause_response (GtkObject * param, gpointer user_data)

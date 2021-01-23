@@ -34,74 +34,15 @@
 #include "interface.h"
 
 
-#ifndef USE_GNOME
-
 /*
  * Choose path and filename of score and preferences files in non-Gnome version
  */
 
-gboolean
-choose_score_file (void)
-{
-  gchar *home_dir;
-  gint temp1, temp2;
-
-  home_dir = g_strdup (g_get_home_dir ());
-#ifdef WIN32  
-  if (home_dir == NULL)
-    home_dir = g_strdup (DATADIR);
-#endif
-  temp1 = strlen (PACKAGE_DATA_DIR G_DIR_SEPARATOR_S "gtktetcolor_score") + 1;
-  if (home_dir) /* strlen(NULL) may behave incorrectly on some platform */
-    temp2 = strlen (home_dir) + 1 + strlen (".gtktetcolor_score") + 1;
-  else
-    temp2 = strlen (".gtktetcolor_score") + 1;
-  if (temp2 > temp1)
-    temp1 = temp2;
-  if (score_path)
-    g_free (score_path);
-  score_path = (gchar *) g_malloc (temp1);
-
-  if (home_dir)
-    temp2 = strlen (home_dir) + 1 + strlen (".gtktetcolorrc") + 1;
-  else
-    temp2 = strlen (".gtktetcolorrc") + 1;
-  rcfile_path = (gchar *) g_malloc (temp2);
-  /* strcpy(x,NULL) may behave incorrectly on some platform */
-  if (home_dir) {
-    strcpy (rcfile_path, home_dir);
-    strcat (rcfile_path, G_DIR_SEPARATOR_S);
-    strcat (rcfile_path, ".gtktetcolorrc");
-  }
-  else
-    strcpy (rcfile_path, ".gtktetcolorrc");
-
-  strcpy (score_path, PACKAGE_DATA_DIR G_DIR_SEPARATOR_S "gtktetcolor_score");
-  if ((score_file = fopen (score_path, "r+")) == NULL)
-    g_print ("\ncannot open system score file %s for writing\n", score_path);
-  else {
-    fclose (score_file);
-    if (home_dir)
-      g_free (home_dir);
-    return TRUE;
-  }
-  if (home_dir) {
-    strcpy (score_path, home_dir);
-    strcat (score_path, G_DIR_SEPARATOR_S);
-    strcat (score_path, ".gtktetcolor_score");
-  }
-  else
-    strcpy (score_path, ".gtktetcolor_score");
-  if (home_dir)
-    g_free (home_dir);
-  if ((score_file = fopen (score_path, "a+")) == NULL) {
-    g_print ("\ncannot open file %s for writing\n", score_path);
-    return FALSE;
-  }
-  else {
-    fclose (score_file);
-    return TRUE;
-  }
+static char * choose_score_file (void)
+{ // returns a string that must be freed
+  const char * home_dir = g_getenv ("HOME");
+  gchar *score_path = g_strconcat (home_dir, G_DIR_SEPARATOR_S, ".gtktetcolor_score", NULL);
+  return (score_path);
 }
 
 gboolean
@@ -110,9 +51,12 @@ read_score (void)
   gint i, j;
   gint cksum;
   struct stat file_info;
+  char * score_path = choose_score_file ();
+  FILE * score_file;
 
   if ((score_file = fopen (score_path, "r")) == NULL) {
     g_print ("\ncannot read file %s\n", score_path);
+    g_free (score_path);
     return FALSE;
   }
   stat (score_path, &file_info);	/* We need check if score_path is empty */
@@ -140,6 +84,8 @@ read_score (void)
       name[j][0] = '\0';
       saved_score[j] = 0;
     }
+
+  g_free (score_path);
   fclose (score_file);
   return TRUE;
 }
@@ -148,10 +94,13 @@ gboolean
 write_score (void)
 {
   gint i;
+  char * score_path = choose_score_file ();
+  FILE * score_file;
 
   score_file = fopen (score_path, "w");
   if (!score_file) {
     g_print ("\ncannot write file %s", score_path);
+    g_free (score_path);
     return FALSE;
   }
   for (i = 0; i < 10; i++) {
@@ -160,6 +109,8 @@ write_score (void)
     fprintf (score_file, "%s\t%d\t%x\n", name[i], saved_score[i],
 	     check_line (i));
   }
+
+  g_free (score_path);
   fclose (score_file);
   return TRUE;
 }
@@ -198,4 +149,4 @@ check_line (gint i)
   result = div ((int) ckline, 1111);
   return (gint) result.rem;
 }
-#endif
+
