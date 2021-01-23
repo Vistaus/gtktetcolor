@@ -39,7 +39,7 @@
 #include "../pixmaps/scores.xpm"
 #include "../pixmaps/pause.xpm"
 
-gint cell_width, initial_level, use_graykeys, destroy_delay;
+gint cell_width, initial_level, destroy_delay;
 ///#ifdef USE_GNOME
 gboolean sound_on;
 ///#endif
@@ -519,17 +519,11 @@ create_help_dialog (void)
 			    G_CALLBACK (gtk_widget_destroy),
 			    GTK_OBJECT (dialog));
 
-  if (use_graykeys)
-    label = gtk_label_new (_("Left arrow  - shift block left\n"
-			     "Down arrow  - rotate block clockwise\n"
-			     "Right arrow - shift block right\n"
-			     "Up arrow    - rotate block counter-clockwise\n"
-			     "Space - drop block"));
-  else
-    label = gtk_label_new (_("Num 4 - shift block left\n"
-			     "Num 5 - rotate block clockwise\n"
-			     "Num 6 - shift block right\n"
-			     "Num 8 - rotate block counter-clockwise\n"
+   label = gtk_label_new (_(
+			     "Left arrow  / Num 4 - shift block left\n"
+			     "Down arrow  / Num 5 - rotate block clockwise\n"
+			     "Right arrow / Num 6 - shift block right\n"
+			     "Up arrow    / Num 8 - rotate block counter-clockwise\n"
 			     "Space - drop block"));
 
   gtk_misc_set_padding (GTK_MISC (label), 10, 10);
@@ -556,11 +550,6 @@ create_preferences_dialog (void)
   GtkObject *destroy_delay_spinbutton_adj;
   GtkWidget *destroy_delay_spinbutton;
   GtkWidget *preferences_hbox3;
-  GtkWidget *choose_keys_label;
-  GtkWidget *vbox3;
-  GSList *keys_button_group = NULL;
-  GtkWidget *numkeys_radiobutton;
-  GtkWidget *graykeys_radiobutton;
   GtkWidget *prefs_notebook;
   GtkWidget *options_label;
   GtkWidget *fontselection;
@@ -672,38 +661,6 @@ create_preferences_dialog (void)
   gtk_box_pack_start (GTK_BOX (preferences_vbox), preferences_hbox3, FALSE,
 		      TRUE, 10);
 
-  choose_keys_label = gtk_label_new (_("Choose keys"));
-  gtk_box_pack_start (GTK_BOX (preferences_hbox3), choose_keys_label, FALSE,
-		      FALSE, 10);
-  gtk_misc_set_alignment (GTK_MISC (choose_keys_label), 0.5, 0.1);
-
-  vbox3 = gtk_vbox_new (FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (preferences_hbox3), vbox3, FALSE, FALSE, 10);
-
-  numkeys_radiobutton =
-    gtk_radio_button_new_with_label (keys_button_group, _("numeric keyboard"));
-  keys_button_group =
-    gtk_radio_button_get_group (GTK_RADIO_BUTTON (numkeys_radiobutton));
-  g_object_ref (G_OBJECT (numkeys_radiobutton));
-  g_object_set_data_full (G_OBJECT (preferences_dialog),
-			  "numkeys_radiobutton", numkeys_radiobutton,
-			  (GDestroyNotify) g_object_unref);
-  gtk_box_pack_start (GTK_BOX (vbox3), numkeys_radiobutton, FALSE, FALSE, 0);
-
-  graykeys_radiobutton =
-    gtk_radio_button_new_with_label (keys_button_group, _("arrow keys"));
-  keys_button_group =
-    gtk_radio_button_get_group (GTK_RADIO_BUTTON (graykeys_radiobutton));
-  g_object_ref (G_OBJECT (graykeys_radiobutton));
-  g_object_set_data_full (G_OBJECT (preferences_dialog),
-			  "graykeys_radiobutton", graykeys_radiobutton,
-			  (GDestroyNotify) g_object_unref);
-  gtk_box_pack_end (GTK_BOX (vbox3), graykeys_radiobutton, FALSE, FALSE, 0);
-
-  if (use_graykeys)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (graykeys_radiobutton),
-				  TRUE);
-
 ///#ifdef USE_GNOME
   sound_hbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (preferences_vbox), sound_hbox, FALSE, FALSE, 10);
@@ -724,10 +681,6 @@ create_preferences_dialog (void)
   g_signal_connect (G_OBJECT (sound_checkbutton), "toggled",
 		    G_CALLBACK (on_sound_checkbutton_toggled), NULL);
 ///#endif
-  g_signal_connect (G_OBJECT (numkeys_radiobutton), "clicked",
-		    G_CALLBACK (on_numkeys_radiobutton_clicked), NULL);
-  g_signal_connect (G_OBJECT (graykeys_radiobutton), "clicked",
-		    G_CALLBACK (on_graykeys_radiobutton_clicked), NULL);
 
   gtk_widget_show_all (preferences_dialog);
   

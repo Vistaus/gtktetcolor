@@ -36,11 +36,10 @@
 #include "preferences.h"
 #include "pixmaps.h"
 
-gint cell_width, left_margin, initial_level, use_graykeys;
+gint cell_width, left_margin, initial_level;
 ///#ifdef USE_GNOME
 gboolean sound_on;
 ///#endif
-gint nav_keys[4], alt_nav_keys[4];
 GtkStyle *label_style;
 GdkFont *font;
 gchar *font_name;
@@ -84,43 +83,59 @@ gboolean
 on_main_window_key_press_event (GtkWidget * widget,
 				GdkEventKey * event, gpointer user_data)
 {
-  gint key = event->keyval;
+   gint key = event->keyval;
 
-  if (!timeout || !continue_game)
-    return FALSE;
-  if (key == nav_keys[0] || key == alt_nav_keys[0]) {
-    if (shift_block (1))
-      redraw_cells ();
-    return TRUE;
-  }
-  else if (key == nav_keys[1] || key == alt_nav_keys[1]) {
-    if (shift_block (-1))
-      redraw_cells ();
-    return TRUE;
-  }
-  else if (key == nav_keys[2] || key == alt_nav_keys[2]) {
-    if (block.type)
-      if (rotate_block (rotate_cell_left))
-	redraw_cells ();
-    return TRUE;
-  }
-  else if (key == nav_keys[3] || key == alt_nav_keys[3]) {
-    if (block.type)
-      if (rotate_block (rotate_cell_right))
-	redraw_cells ();
-    return TRUE;
-  }
-  else if (key == GDK_space) {
-    if (timeout) {
-      g_source_remove (timeout);
-      interval = INI_INTERVAL / 100;
-      timeout = g_timeout_add (interval, (GSourceFunc) timeout_callback, main_window);
-      return TRUE;
-    }
-    else
+   if (!timeout || !continue_game) {
       return FALSE;
-  }
-  return FALSE;
+   }
+
+   switch (key)
+   {
+      case GDK_Right:
+      case GDK_KP_Right:
+      case GDK_KP_6:
+         if (shift_block (1)) {
+            redraw_cells ();
+         }
+         return TRUE;
+
+      case GDK_Left:
+      case GDK_KP_Left:
+      case GDK_KP_4:
+         if (shift_block (-1)) {
+            redraw_cells ();
+         }
+         return TRUE;
+
+      case GDK_Up:
+      case GDK_KP_Up:
+      case GDK_KP_8:
+         if (block.type) {
+            if (rotate_block (rotate_cell_left))
+               redraw_cells ();
+         }
+         return TRUE;
+
+      case GDK_Down:
+      case GDK_KP_Begin:
+      case GDK_KP_5:
+         if (block.type) {
+            if (rotate_block (rotate_cell_right))
+               redraw_cells ();
+         }
+         return TRUE;
+
+      case GDK_space:
+         if (timeout) {
+            g_source_remove (timeout);
+            interval = INI_INTERVAL / 100;
+            timeout = g_timeout_add (interval, (GSourceFunc) timeout_callback, main_window);
+            return TRUE;
+         }
+         break;
+   }
+
+   return FALSE;
 }
 
 
@@ -236,21 +251,6 @@ on_drawingarea_expose_event (GtkWidget * widget,
 {
   redraw_all_cells ();
   return FALSE;
-}
-
-void
-on_numkeys_radiobutton_clicked (GtkButton * button, gpointer user_data)
-{
-  use_graykeys = 0;
-  preferences_changed = TRUE;
-}
-
-
-void
-on_graykeys_radiobutton_clicked (GtkButton * button, gpointer user_data)
-{
-  use_graykeys = 1;
-  preferences_changed = TRUE;
 }
 
 ///#ifdef USE_GNOME

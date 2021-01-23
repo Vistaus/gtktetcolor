@@ -37,11 +37,10 @@
 #include "preferences.h"
 #include "pixmaps.h"
 
-gint cell_width, left_margin, initial_level, use_graykeys, destroy_delay;
+gint cell_width, left_margin, initial_level, destroy_delay;
 ///#ifdef USE_GNOME
 gboolean sound_on;
 ///#endif
-gint nav_keys[4], alt_nav_keys[4];
 GtkStyle *label_style;
 gchar *font_name;
 gchar *label_name[MAX_LABEL];	/* Label identifiers */
@@ -95,26 +94,6 @@ change_preferences (GtkWidget * widget)
   if (temp != destroy_delay) {
     destroy_delay = temp;
     preferences_changed = TRUE;
-  }
-  if (use_graykeys) {
-    nav_keys[0] = GDK_Right;
-    nav_keys[1] = GDK_Left;
-    nav_keys[2] = GDK_Up;
-    nav_keys[3] = GDK_Down;
-    alt_nav_keys[0] = GDK_Right;
-    alt_nav_keys[1] = GDK_Left;
-    alt_nav_keys[2] = GDK_Up;
-    alt_nav_keys[3] = GDK_Down;
-  }
-  else {
-    nav_keys[0] = GDK_KP_6;
-    nav_keys[1] = GDK_KP_4;
-    nav_keys[2] = GDK_KP_8;
-    nav_keys[3] = GDK_KP_5;
-    alt_nav_keys[0] = GDK_KP_Right;
-    alt_nav_keys[1] = GDK_KP_Left;
-    alt_nav_keys[2] = GDK_KP_Up;
-    alt_nav_keys[3] = GDK_KP_Begin;
   }
   new_font_name =
     gtk_font_selection_get_font_name (GTK_FONT_SELECTION (fontselection));
@@ -235,11 +214,6 @@ load_preferences ()
 	if (temp >= 1 && temp <= 9)
 	  initial_level = temp;
       }
-      else if (strcmp (str, "use_graykeys") == 0) {
-	fscanf (rcfile, "%d ", &temp);
-	if (temp == 1 || temp == 0)
-	  use_graykeys = temp;
-      }
       else if (strcmp (str, "destroy_delay") == 0) {
 	fscanf (rcfile, "%d ", &temp);
 	if (temp >= 0 && temp <= MAX_DESTROY_DELAY)
@@ -296,7 +270,6 @@ save_preferences (void)
   } else {
     fprintf (rcfile, "cell_size %d\n", cell_width);
     fprintf (rcfile, "initial_level %d\n", initial_level);
-    fprintf (rcfile, "use_graykeys %d\n", use_graykeys);
     fprintf (rcfile, "destroy_delay %d\n", destroy_delay);
     if (font_name)
       fprintf (rcfile, "font %d %s\n", strlen (font_name), font_name);

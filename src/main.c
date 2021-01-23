@@ -53,10 +53,7 @@ gint use_graykeys =  0;
 
 ///#ifdef USE_GNOME
 gboolean sound_on = 0;
-///#else
-gboolean text_toolbar = 0;
 ///#endif
-gint nav_keys[4], alt_nav_keys[4];
 gchar *font_name;
 
 GdkPixbuf *colors[NUMBER_COLORS + 1], *border_w_gdkxpm, *border_h_gdkxpm;
@@ -81,28 +78,6 @@ main (int argc, char *argv[])
   load_preferences ();
 
   main_window = create_main_window ();
-
-  if (use_graykeys) {
-    nav_keys[0] = GDK_Right;
-    nav_keys[1] = GDK_Left;
-    nav_keys[2] = GDK_Up;
-    nav_keys[3] = GDK_Down;
-    alt_nav_keys[0] = GDK_Right;
-    alt_nav_keys[1] = GDK_Left;
-    alt_nav_keys[2] = GDK_Up;
-    alt_nav_keys[3] = GDK_Down;
-  }
-  else {
-    nav_keys[0] = GDK_KP_6;
-    nav_keys[1] = GDK_KP_4;
-    nav_keys[2] = GDK_KP_8;
-    nav_keys[3] = GDK_KP_5;
-    alt_nav_keys[0] = GDK_KP_Right;
-    alt_nav_keys[1] = GDK_KP_Left;
-    alt_nav_keys[2] = GDK_KP_Up;
-    alt_nav_keys[3] = GDK_KP_Begin;
-  }
-
   create_pixmaps (drawingarea, 1);
 
   icon_xpm = gdk_pixbuf_new_from_xpm_data ((const char **) &gtktetcolor_xpm);

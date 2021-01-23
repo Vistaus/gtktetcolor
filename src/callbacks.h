@@ -58,10 +58,6 @@ gboolean
 on_drawingarea_expose_event (GtkWidget * widget,
 			     GdkEventExpose * event, gpointer user_data);
 
-void on_numkeys_radiobutton_clicked (GtkButton * button, gpointer user_data);
-
-void on_graykeys_radiobutton_clicked (GtkButton * button, gpointer user_data);
-
 void on_font_ok_button_clicked (GtkButton * button, gpointer user_data);
 
 void on_font_cancel_button_clicked (GtkButton * button, gpointer user_data);
