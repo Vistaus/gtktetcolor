@@ -1,17 +1,10 @@
 ## Process this file with automake to produce Makefile.in
-if use_gnome
-Gamesdir = $(datadir)/applications
-soundlistdir = $(sysconfdir)/sound/events
-icondir = $(datadir)/pixmaps
-Games_in_files = gtktetcolor.desktop.in
-Games_DATA = $(Games_in_files:.desktop.in=.desktop)
-@INTLTOOL_DESKTOP_RULE@
 
-## Games_DATA = gtktetcolor.desktop
+Gamesdir = $(datadir)/applications
+icondir = $(datadir)/pixmaps
+Games_DATA = gtktetcolor.desktop
 icon_DATA = gtktetcolor.xpm
-else
 scoredir=${datadir}/gtktetcolor
-endif
 
 AM_CPPFLAGS = \
 	-DDATADIR=\"$(datadir)\" -DLOCALEDIR=\"$(datadir)/locale\" \
@@ -27,8 +20,6 @@ gtktetcolor_SOURCES = \
 	preferences.c\
 	game.c\
 	pixmaps.c
-
-EXTRA_DIST = gtktetcolor.desktop.in
 
 gtktetcolor_LDADD = @GTK_LIBS@ @GNOME_LIBS@
 

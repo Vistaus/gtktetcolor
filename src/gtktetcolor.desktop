@@ -1,9 +1,8 @@
 [Desktop Entry]
-_Name=Gtketcolor
-_Comment=tetcolor for Gnome
+Name=GtkTetcolor (tetris color)
 Exec=gtktetcolor
 Icon=gtktetcolor.xpm
 Terminal=false
 Type=Application
 StartupNotify=true
-Categories=GNOME;Application;Game;BlocksGame;
+Categories=Game;BlocksGame;
