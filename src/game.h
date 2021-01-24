@@ -21,8 +21,7 @@ void init_game (GtkWidget * widget);
 
 void game_over (GtkWidget * widget);
 
-gboolean
-timeout_callback ( gpointer data );
+gboolean timeout_callback ( gpointer data );
 
 gboolean rotate_cell_right (gint i, gint * newx, gint * newy);
 
