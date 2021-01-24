@@ -78,8 +78,7 @@ static GtkItemFactoryEntry menu_items[] =
 # endif
 
 
-GtkWidget *
-create_main_window (void)
+GtkWidget * create_main_window (void)
 {
    GtkWidget *vbox1;
    GtkWidget *menubar1;
@@ -125,11 +124,6 @@ create_main_window (void)
    gtk_window_set_resizable (GTK_WINDOW (main_window), FALSE);
 
    vbox1 = gtk_vbox_new (FALSE, 0);
-   gtk_widget_set_name (vbox1, "vbox1");
-   g_object_ref (G_OBJECT (vbox1));
-   g_object_set_data_full (G_OBJECT (main_window), "vbox1", vbox1,
-                           (GDestroyNotify) g_object_unref);
-   gtk_widget_show (vbox1);
    gtk_container_add (GTK_CONTAINER (main_window), vbox1);
 
    gtktetcolor_factory = gtk_icon_factory_new ();
@@ -160,14 +154,12 @@ create_main_window (void)
 
 # ifndef ITEMFACTORY
    Game = gtk_image_menu_item_new_with_mnemonic (_("_Game"));
-   gtk_widget_show (Game);
    gtk_container_add (GTK_CONTAINER (menubar1), Game);
 
    Game_menu = gtk_menu_new ();
    gtk_menu_item_set_submenu (GTK_MENU_ITEM (Game), Game_menu);
 
    new = gtk_image_menu_item_new_with_mnemonic (_("_New game"));
-   gtk_widget_show (new);
    gtk_container_add (GTK_CONTAINER (Game_menu), new);
    gtk_widget_add_accelerator (new, "activate", accel_group,
                                GDK_N, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
@@ -175,7 +167,6 @@ create_main_window (void)
    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (new), tmp_toolbar_icon);
 
    pause = gtk_image_menu_item_new_with_mnemonic (_("_Pause"));
-   gtk_widget_show (pause);
    gtk_container_add (GTK_CONTAINER (Game_menu), pause);
    gtk_widget_add_accelerator (pause, "activate", accel_group,
                                GDK_P, 0, GTK_ACCEL_VISIBLE);
@@ -183,130 +174,91 @@ create_main_window (void)
    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pause), tmp_toolbar_icon);
 
    scores = gtk_image_menu_item_new_with_label (_("Scores"));
-   gtk_widget_show (scores);
    gtk_container_add (GTK_CONTAINER (Game_menu), scores);
    tmp_toolbar_icon = gtk_image_new_from_stock ("gnome-stock-scores", GTK_ICON_SIZE_MENU);
    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (scores), tmp_toolbar_icon);
 
    preferences = gtk_image_menu_item_new_from_stock (GTK_STOCK_PROPERTIES, accel_group);
-   gtk_widget_show (preferences);
    gtk_container_add (GTK_CONTAINER (Game_menu), preferences);
 
    quit = gtk_image_menu_item_new_from_stock (GTK_STOCK_QUIT, accel_group);
-   gtk_widget_show (quit);
    gtk_container_add (GTK_CONTAINER (Game_menu), quit);
 
    Help = gtk_image_menu_item_new_from_stock (GTK_STOCK_HELP, accel_group);
-   gtk_widget_show (Help);
    gtk_container_add (GTK_CONTAINER (menubar1), Help);
 
    Help_menu = gtk_menu_new ();
    gtk_menu_item_set_submenu (GTK_MENU_ITEM (Help), Help_menu);
 
    on_keys = gtk_image_menu_item_new_with_label (_("on keys"));
-   g_object_ref (G_OBJECT (on_keys));
-   g_object_set_data_full (G_OBJECT (main_window), "on_keys", on_keys,
-                           (GDestroyNotify) g_object_unref);
-   gtk_widget_show (on_keys);
    gtk_container_add (GTK_CONTAINER (Help_menu), on_keys);
 
    about = gtk_image_menu_item_new_with_mnemonic (_("_About"));
-   gtk_widget_show (about);
    gtk_container_add (GTK_CONTAINER (Help_menu), about);
    tmp_toolbar_icon = gtk_image_new_from_stock (GTK_STOCK_ABOUT, GTK_ICON_SIZE_MENU);
    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (about), tmp_toolbar_icon);
 # endif
 
    working_hbox = gtk_hbox_new (FALSE, 0);
-   gtk_widget_show (working_hbox);
    gtk_box_pack_start (GTK_BOX (vbox1), working_hbox, TRUE, TRUE, 0);
 
    left_margin_vbox = gtk_vbox_new (FALSE, 5);
-   gtk_widget_show (left_margin_vbox);
    gtk_box_pack_start (GTK_BOX (working_hbox), left_margin_vbox, TRUE, TRUE, 0);
    gtk_container_set_border_width (GTK_CONTAINER (left_margin_vbox), 10);
 
    bonus_label = gtk_label_new ("");
-   g_object_ref (G_OBJECT (bonus_label));
-   g_object_set_data_full (G_OBJECT (main_window), label_name[0],
-                           bonus_label, (GDestroyNotify) g_object_unref);
-   gtk_widget_show (bonus_label);
+   g_object_set_data_full (G_OBJECT (main_window), label_name[0], bonus_label, NULL);
    gtk_box_pack_start (GTK_BOX (left_margin_vbox), bonus_label, FALSE, FALSE, 0);
 
    bonus_label_number = gtk_label_new ("");
-   g_object_ref (G_OBJECT (bonus_label_number));
-   g_object_set_data_full (G_OBJECT (main_window), label_name[1],
-                           bonus_label_number, (GDestroyNotify) g_object_unref);
-   gtk_widget_show (bonus_label_number);
-   gtk_box_pack_start (GTK_BOX (left_margin_vbox), bonus_label_number, FALSE, FALSE, 0);
+   g_object_set_data_full (G_OBJECT (main_window), label_name[1], bonus_label_number, NULL);
+    gtk_box_pack_start (GTK_BOX (left_margin_vbox), bonus_label_number, FALSE, FALSE, 0);
 
    level_label = gtk_label_new (_("Level"));
-   g_object_ref (G_OBJECT (level_label));
-   g_object_set_data_full (G_OBJECT (main_window), label_name[2],
-                           level_label, (GDestroyNotify) g_object_unref);
-   gtk_widget_show (level_label);
+   g_object_set_data_full (G_OBJECT (main_window), label_name[2], level_label, NULL);
    gtk_box_pack_start (GTK_BOX (left_margin_vbox), level_label, FALSE, FALSE, 0);
 
    label_level_number = gtk_label_new ("");
-   g_object_ref (G_OBJECT (label_level_number));
-   g_object_set_data_full (G_OBJECT (main_window), label_name[3], label_level_number, (GDestroyNotify) g_object_unref);
-   gtk_widget_show (label_level_number);
+   g_object_set_data_full (G_OBJECT (main_window), label_name[3], label_level_number, NULL);
    gtk_box_pack_start (GTK_BOX (left_margin_vbox), label_level_number, FALSE, FALSE, 0);
 
    score_label = gtk_label_new (_("Score"));
-   gtk_widget_set_name (score_label, label_name[4]);
-   g_object_ref (G_OBJECT (score_label));
-   g_object_set_data_full (G_OBJECT (main_window), label_name[4], score_label, (GDestroyNotify) g_object_unref);
-   gtk_widget_show (score_label);
+   g_object_set_data_full (G_OBJECT (main_window), label_name[4], score_label, NULL);
    gtk_box_pack_start (GTK_BOX (left_margin_vbox), score_label, FALSE, FALSE, 0);
 
    score_label_number = gtk_label_new ("0");
-   g_object_ref (G_OBJECT (score_label_number));
-   g_object_set_data_full (G_OBJECT (main_window), label_name[5], score_label_number, (GDestroyNotify) g_object_unref);
-   gtk_widget_show (score_label_number);
+   g_object_set_data_full (G_OBJECT (main_window), label_name[5], score_label_number, NULL);
    gtk_box_pack_start (GTK_BOX (left_margin_vbox), score_label_number, FALSE, FALSE, 0);
 
    empty_label = gtk_label_new ("");
-   g_object_ref (G_OBJECT (empty_label));
-   g_object_set_data_full (G_OBJECT (main_window), label_name[MAX_LABEL - 1], empty_label, (GDestroyNotify) g_object_unref);
-   gtk_widget_show (empty_label);
+   g_object_set_data_full (G_OBJECT (main_window), label_name[MAX_LABEL - 1], empty_label, NULL);
    gtk_box_pack_end (GTK_BOX (left_margin_vbox), empty_label, FALSE, FALSE, 0);
 
    drawingarea = gtk_drawing_area_new ();
-   gtk_widget_show (drawingarea);
    gtk_box_pack_start (GTK_BOX (working_hbox), drawingarea, TRUE, TRUE, 0);
    gtk_widget_set_size_request (drawingarea, X_SIZE * cell_width + 2 * border,
                                 Y_SIZE * cell_width + 2 * border);
 
    right_margin_vbox = gtk_vbox_new (FALSE, 5);
-   gtk_widget_show (right_margin_vbox);
    gtk_box_pack_start (GTK_BOX (working_hbox), right_margin_vbox, TRUE, TRUE, 0);
    gtk_container_set_border_width (GTK_CONTAINER (right_margin_vbox), 10);
 
    max_score_label = gtk_label_new (_("max score"));
-   g_object_ref (G_OBJECT (max_score_label));
-   g_object_set_data_full (G_OBJECT (main_window), label_name[6], max_score_label, (GDestroyNotify) g_object_unref);
-   gtk_widget_show (max_score_label);
+   g_object_set_data_full (G_OBJECT (main_window), label_name[6], max_score_label, NULL);
    gtk_box_pack_start (GTK_BOX (right_margin_vbox), max_score_label, FALSE, FALSE, 0);
 
    max_score_number_label = gtk_label_new ("");
-   g_object_ref (G_OBJECT (max_score_number_label));
-   g_object_set_data_full (G_OBJECT (main_window), label_name[7], max_score_number_label, (GDestroyNotify) g_object_unref);
-   gtk_widget_show (max_score_number_label);
+   g_object_set_data_full (G_OBJECT (main_window), label_name[7], max_score_number_label, NULL);
    gtk_box_pack_start (GTK_BOX (right_margin_vbox), max_score_number_label, FALSE, FALSE, 0);
 
    timer_label = gtk_label_new ("");
-   g_object_ref (G_OBJECT (timer_label));
-   g_object_set_data_full (G_OBJECT (main_window), label_name[8], timer_label, (GDestroyNotify) g_object_unref);
-   gtk_widget_show (timer_label);
+   g_object_set_data_full (G_OBJECT (main_window), label_name[8], timer_label, NULL);
    gtk_box_pack_end (GTK_BOX (right_margin_vbox), timer_label, FALSE, FALSE, 0);
 
    change_font_of_labels ();
 
    statusbar1 = gtk_statusbar_new ();
-   g_object_ref (G_OBJECT (statusbar1));
-   g_object_set_data_full (G_OBJECT (main_window), "statusbar1", statusbar1, (GDestroyNotify) g_object_unref);
-   gtk_widget_show (statusbar1);
+   g_object_set_data_full (G_OBJECT (main_window), "statusbar1", statusbar1, NULL);
    gtk_box_pack_start (GTK_BOX (vbox1), statusbar1, FALSE, TRUE, 0);
 
    g_signal_connect (G_OBJECT (main_window), "delete-event",
@@ -414,8 +366,7 @@ create_scores_dialog (void)
 }
 
 
-void
-create_name_dialog (void)
+void create_name_dialog (void)
 {
    GtkWidget *dialog;
    GtkWidget *name_frame;
@@ -442,8 +393,7 @@ create_name_dialog (void)
       gtk_entry_set_text (GTK_ENTRY (name_entry), new_name);
       gtk_editable_select_region (GTK_EDITABLE (name_entry), 0, strlen (new_name));
    }
-   g_object_ref (G_OBJECT (name_entry));
-   g_object_set_data_full (G_OBJECT (dialog), "name_entry", name_entry, (GDestroyNotify) g_object_unref);
+   g_object_set_data_full (G_OBJECT (dialog), "name_entry", name_entry, NULL);
    gtk_container_add (GTK_CONTAINER (name_frame), name_entry);
    gtk_widget_grab_focus (name_entry);
    gtk_widget_show_all (dialog);
@@ -506,8 +456,7 @@ create_help_dialog (void)
 }
 
 
-void
-create_preferences_dialog (void)
+void create_preferences_dialog (void)
 {
    GtkWidget *preferences_dialog;
    GtkWidget *preferences_vbox;
@@ -556,8 +505,7 @@ create_preferences_dialog (void)
                                options_label);
 
    fontselection = gtk_font_selection_new ();
-   g_object_ref (G_OBJECT (fontselection));
-   g_object_set_data_full (G_OBJECT (preferences_dialog), "fontselection", fontselection, (GDestroyNotify) g_object_unref);
+   g_object_set_data_full (G_OBJECT (preferences_dialog), "fontselection", fontselection, NULL);
 
    fonts_label = gtk_label_new (_("Font for labels"));
    gtk_container_add (GTK_CONTAINER (prefs_notebook), fontselection);
@@ -573,8 +521,7 @@ create_preferences_dialog (void)
 
    cell_size_spinbutton_adj = gtk_adjustment_new ((gfloat) cell_width, 10, MAX_CELL_SIZE, 1, 10, 10);
    cell_size_spinbutton = gtk_spin_button_new (GTK_ADJUSTMENT (cell_size_spinbutton_adj), 1, 0);
-   g_object_ref (G_OBJECT (cell_size_spinbutton));
-   g_object_set_data_full (G_OBJECT (preferences_dialog), "cell_size_spinbutton", cell_size_spinbutton,(GDestroyNotify) g_object_unref);
+   g_object_set_data_full (G_OBJECT (preferences_dialog), "cell_size_spinbutton", cell_size_spinbutton, NULL);
 
    gtk_box_pack_start (GTK_BOX (preferences_hbox1), cell_size_spinbutton, FALSE, TRUE, 10);
 
@@ -586,8 +533,7 @@ create_preferences_dialog (void)
 
    initial_level_spinbutton_adj = gtk_adjustment_new ((gfloat) initial_level, 1, 9, 1, 10, 10);
    initial_level_spinbutton = gtk_spin_button_new (GTK_ADJUSTMENT (initial_level_spinbutton_adj), 1, 0);
-   g_object_ref (G_OBJECT (initial_level_spinbutton));
-   g_object_set_data_full (G_OBJECT (preferences_dialog), "initial_level_spinbutton", initial_level_spinbutton, (GDestroyNotify) g_object_unref);
+   g_object_set_data_full (G_OBJECT (preferences_dialog), "initial_level_spinbutton", initial_level_spinbutton, NULL);
    gtk_box_pack_start (GTK_BOX (preferences_hbox2), initial_level_spinbutton, FALSE, TRUE, 10);
 
    preferences_destroy_delay_hbox = gtk_hbox_new (FALSE, 0);
@@ -598,8 +544,7 @@ create_preferences_dialog (void)
 
    destroy_delay_spinbutton_adj = gtk_adjustment_new ((gfloat) destroy_delay, 5, MAX_DESTROY_DELAY, 5, 10, 10);
    destroy_delay_spinbutton = gtk_spin_button_new (GTK_ADJUSTMENT (destroy_delay_spinbutton_adj), 1, 0);
-   g_object_ref (G_OBJECT (destroy_delay_spinbutton));
-   g_object_set_data_full (G_OBJECT (preferences_dialog), "destroy_delay_spinbutton", destroy_delay_spinbutton, (GDestroyNotify) g_object_unref);
+   g_object_set_data_full (G_OBJECT (preferences_dialog), "destroy_delay_spinbutton", destroy_delay_spinbutton, NULL);
    gtk_box_pack_start (GTK_BOX (preferences_destroy_delay_hbox), destroy_delay_spinbutton, FALSE, TRUE, 10);
 
    preferences_hbox3 = gtk_hbox_new (FALSE, 0);
@@ -610,8 +555,7 @@ create_preferences_dialog (void)
    gtk_box_pack_start (GTK_BOX (preferences_vbox), sound_hbox, FALSE, FALSE, 10);
 
    sound_checkbutton = gtk_check_button_new_with_label (_("Use sound"));
-   g_object_ref (G_OBJECT (sound_checkbutton));
-   g_object_set_data_full (G_OBJECT (preferences_dialog), "sound_checkbutton", sound_checkbutton, (GDestroyNotify) g_object_unref);
+   g_object_set_data_full (G_OBJECT (preferences_dialog), "sound_checkbutton", sound_checkbutton, NULL);
    gtk_box_pack_start (GTK_BOX (sound_hbox), sound_checkbutton, FALSE, FALSE, 10);
 
    if (sound_on)
