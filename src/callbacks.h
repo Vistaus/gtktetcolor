@@ -19,53 +19,25 @@
 
 #include <gtk/gtk.h>
 
-
-gboolean
-on_main_window_delete_event (GtkWidget * widget,
-			     GdkEvent * event, gpointer user_data);
+gboolean on_main_window_delete_event (GtkWidget * widget, GdkEvent * event, gpointer user_data);
+gboolean on_main_window_key_press_event (GtkWidget * widget, GdkEventKey * event, gpointer user_data);
+gboolean on_drawingarea_expose_event (GtkWidget * widget, GdkEventExpose * event, gpointer user_data);
 
 void on_new_activate (GtkWidget * menuitem, gpointer user_data);
-
 void on_scores_activate (GtkWidget * menuitem, gpointer user_data);
-
 void on_quit_activate (GtkWidget * menuitem, gpointer user_data);
-
 void on_about_activate (GtkWidget * menuitem, gpointer user_data);
-
 void on_pause_activate (GtkWidget * menuitem, gpointer user_data);
-
 void help_on_keys_activate (GtkWidget * menuitem, gpointer user_data);
-
 void on_preferences_activate (GtkWidget * menuitem, gpointer user_data);
 
-gboolean
-on_main_window_key_press_event (GtkWidget * widget,
-				GdkEventKey * event, gpointer user_data);
-
 void on_name_response (GtkObject * obj, gpointer user_data);
-
 void on_pause_response (GtkObject * param, gpointer user_data);
-
-gboolean
-on_main_window_expose_event (GtkWidget * widget,
-			     GdkEventExpose * event, gpointer user_data);
-
-void
-preferences_dialog_response (GtkDialog * dialog, gint response_id,
-			     gpointer data);
-
-gboolean
-on_drawingarea_expose_event (GtkWidget * widget,
-			     GdkEventExpose * event, gpointer user_data);
+void preferences_dialog_response (GtkDialog * dialog, gint response_id, gpointer data);
 
 void on_font_ok_button_clicked (GtkButton * button, gpointer user_data);
-
 void on_font_cancel_button_clicked (GtkButton * button, gpointer user_data);
-
 void on_font_apply_button_clicked (GtkButton * button, gpointer user_data);
-
 void on_fontsel_button_clicked (GtkButton * button, gpointer user_data);
 
-void
-on_sound_checkbutton_toggled (GtkToggleButton * togglebutton,
-			      gpointer user_data);
+void on_sound_checkbutton_toggled (GtkToggleButton * togglebutton, gpointer user_data);

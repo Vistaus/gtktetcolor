@@ -49,39 +49,37 @@ gboolean preferences_changed;
 
 
 gboolean
-on_main_window_delete_event (GtkWidget * widget,
-			     GdkEvent * event, gpointer user_data)
+on_main_window_delete_event (GtkWidget * widget, GdkEvent * event, gpointer user_data)
 {
-  gtk_main_quit ();
-  return FALSE;
+   gtk_main_quit ();
+   return FALSE;
 }
 
 
 void
 on_new_activate (GtkWidget * menuitem, gpointer user_data)
 {
-  init_game (menuitem);
+   init_game (menuitem);
 }
 
 
 void
 on_scores_activate (GtkWidget * menuitem, gpointer user_data)
 {
-  create_scores_dialog ();
+   create_scores_dialog ();
 }
 
 
 void
 on_quit_activate (GtkWidget * menuitem, gpointer user_data)
 {
-  gtk_main_quit ();
-  gtk_widget_destroy (main_window);
+   gtk_main_quit ();
+   gtk_widget_destroy (main_window);
 }
 
 
 gboolean
-on_main_window_key_press_event (GtkWidget * widget,
-				GdkEventKey * event, gpointer user_data)
+on_main_window_key_press_event (GtkWidget * widget, GdkEventKey * event, gpointer user_data)
 {
    gint key = event->keyval;
 
@@ -142,115 +140,109 @@ on_main_window_key_press_event (GtkWidget * widget,
 void
 on_name_response (GtkObject * obj, gpointer user_data)
 {
-  GtkWidget *widget;
-  gchar *str;
+   GtkWidget *widget;
+   gchar *str;
 
-  widget = (GtkWidget *) g_object_get_data (G_OBJECT (obj), "name_entry");
-  str = g_strdup (gtk_entry_get_text (GTK_ENTRY (widget)));
-  if (strlen (str) == 0) {
-    str = g_strdup (g_get_real_name ());
-    if (strlen (str) == 0)
-      str = g_strdup (g_get_user_name ());
-  }
-  if (strlen(str) > 255){
-    strncpy (new_name, str, 255);
-    new_name[255] = '\0';
-  }
-  else
-    strcpy (new_name, str);
-  if (str)
-    g_free (str);
+   widget = (GtkWidget *) g_object_get_data (G_OBJECT (obj), "name_entry");
+   str = g_strdup (gtk_entry_get_text (GTK_ENTRY (widget)));
+   if (strlen (str) == 0) {
+      str = g_strdup (g_get_real_name ());
+      if (strlen (str) == 0) {
+         str = g_strdup (g_get_user_name ());
+      }
+   }
+   if (strlen(str) > 255){
+      strncpy (new_name, str, 255);
+      new_name[255] = '\0';
+   }
+   else {
+      strcpy (new_name, str);
+   }
+   if (str) {
+      g_free (str);
+   }
 
-  strcpy (name[name_i], new_name);
-  saved_score[name_i] = score;
-  write_score ();
-  gtk_widget_destroy ((GtkWidget *) obj);
+   strcpy (name[name_i], new_name);
+   saved_score[name_i] = score;
+   write_score ();
+   gtk_widget_destroy ((GtkWidget *) obj);
 }
 
 
 void
 on_pause_response (GtkObject * param, gpointer user_data)
 {
-  GtkWidget *pause_dialog;
+   GtkWidget *pause_dialog;
 
-  continue_game = 1;
-  pause_dialog = (GtkWidget *) param;
-  interval = INI_INTERVAL - INI_INTERVAL * (level - 1) / 10;
-  timeout = g_timeout_add (interval, (GSourceFunc) timeout_callback, main_window);
-  level_timeout = g_timeout_add (LEVEL_INT, (GSourceFunc) change_level, main_window);
-  gtk_widget_destroy (pause_dialog);
+   continue_game = 1;
+   pause_dialog = (GtkWidget *) param;
+   interval = INI_INTERVAL - INI_INTERVAL * (level - 1) / 10;
+   timeout = g_timeout_add (interval, (GSourceFunc) timeout_callback, main_window);
+   level_timeout = g_timeout_add (LEVEL_INT, (GSourceFunc) change_level, main_window);
+   gtk_widget_destroy (pause_dialog);
 }
 
 void
 on_pause_activate (GtkWidget * menuitem, gpointer user_data)
 {
-  if (continue_game) {
-    create_pause_dialog ();
-    if (timeout)
-      g_source_remove (timeout);
-    if (level_timeout)
-      g_source_remove (level_timeout);
-    continue_game = 0;
-  }
+   if (continue_game) {
+      create_pause_dialog ();
+      if (timeout) {
+         g_source_remove (timeout);
+      }
+      if (level_timeout) {
+         g_source_remove (level_timeout);
+      }
+      continue_game = 0;
+   }
 }
 
 
 void
 help_on_keys_activate (GtkWidget * menuitem, gpointer user_data)
 {
-  create_help_dialog ();
+   create_help_dialog ();
 }
 
-
-/*
-gboolean
-on_main_window_expose_event (GtkWidget * widget,
-			     GdkEventExpose * event, gpointer user_data)
-{
-  redraw_all_cells ();
-  return FALSE;
-}
-*/
 
 void
 on_preferences_activate (GtkWidget * menuitem, gpointer user_data)
 {
-  create_preferences_dialog ();
+   create_preferences_dialog ();
 }
 
 
 void
-preferences_dialog_response (GtkDialog * dialog, gint response_id,
-			     gpointer data)
+preferences_dialog_response (GtkDialog * dialog, gint response_id, gpointer data)
 {
-  switch (response_id) {
-  case GTK_RESPONSE_OK:	/* OK */
-    change_preferences (GTK_WIDGET (dialog));
-    if (preferences_changed)
-      save_preferences ();
-    if (dialog)
-      gtk_widget_destroy (GTK_WIDGET (dialog));
-    break;
-  case GTK_RESPONSE_APPLY:	/* APPLY */
-    change_preferences (GTK_WIDGET (dialog));
-    if (preferences_changed)
-      save_preferences ();
-    break;
-  case GTK_RESPONSE_CLOSE:	/* CLOSE */
-  case GTK_RESPONSE_DELETE_EVENT:
-    if (dialog)
-      gtk_widget_destroy (GTK_WIDGET (dialog));
-    break;
+   switch (response_id)
+   {
+      case GTK_RESPONSE_OK:	/* OK */
+         change_preferences (GTK_WIDGET (dialog));
+         if (preferences_changed)
+            save_preferences ();
+         if (dialog)
+            gtk_widget_destroy (GTK_WIDGET (dialog));
+         break;
+      case GTK_RESPONSE_APPLY:	/* APPLY */
+         change_preferences (GTK_WIDGET (dialog));
+         if (preferences_changed)
+            save_preferences ();
+         break;
+      case GTK_RESPONSE_CLOSE:	/* CLOSE */
+      case GTK_RESPONSE_DELETE_EVENT:
+         if (dialog)
+            gtk_widget_destroy (GTK_WIDGET (dialog));
+         break;
   }
 }
 
 
 gboolean
-on_drawingarea_expose_event (GtkWidget * widget,
-			     GdkEventExpose * event, gpointer user_data)
+on_drawingarea_expose_event (GtkWidget * widget, GdkEventExpose * event, gpointer user_data)
 {
-  redraw_all_cells ();
-  return FALSE;
+   redraw_all_cells ();
+   return FALSE;
 }
 
 ///#ifdef USE_GNOME
@@ -258,7 +250,7 @@ void
 on_sound_checkbutton_toggled (GtkToggleButton * togglebutton,
 			      gpointer user_data)
 {
-  sound_on = !sound_on;
-  preferences_changed = TRUE;
+   sound_on = !sound_on;
+   preferences_changed = TRUE;
 }
 ///#endif
