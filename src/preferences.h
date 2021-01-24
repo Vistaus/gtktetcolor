@@ -18,10 +18,7 @@
  */
 
 void load_preferences (void);
-
 void save_preferences (void);
-
 void change_preferences (GtkWidget * widget);
-
 void change_font_of_labels (void);
 
