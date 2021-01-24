@@ -95,9 +95,6 @@ GtkWidget * create_main_window (void)
    GtkWidget *about;
    GtkWidget *tmp_toolbar_icon;
    GtkAccelGroup *accel_group;
-   GtkIconFactory *gtktetcolor_factory;
-   GtkIconSet *tmp_iconset;
-   GdkPixbuf *tmp_pixbuf;
 # ifdef ITEMFACTORY
    GtkItemFactory *item_factory;
 # endif
@@ -126,21 +123,8 @@ GtkWidget * create_main_window (void)
    vbox1 = gtk_vbox_new (FALSE, 0);
    gtk_container_add (GTK_CONTAINER (main_window), vbox1);
 
-   gtktetcolor_factory = gtk_icon_factory_new ();
-
-   tmp_pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) &scores_xpm);
-   tmp_iconset = gtk_icon_set_new_from_pixbuf (tmp_pixbuf);
-   g_object_unref (tmp_pixbuf);
-   gtk_icon_factory_add (gtktetcolor_factory, "gnome-stock-scores", tmp_iconset);
-   gtk_icon_set_unref (tmp_iconset);
-
-   tmp_pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) &pause_xpm);
-   tmp_iconset = gtk_icon_set_new_from_pixbuf (tmp_pixbuf);
-   g_object_unref (tmp_pixbuf);
-   gtk_icon_factory_add (gtktetcolor_factory, "gnome-stock-timer-stop", tmp_iconset);
-   gtk_icon_set_unref (tmp_iconset);
-
-   gtk_icon_factory_add_default (gtktetcolor_factory);
+   GdkPixbuf * scores_pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) &scores_xpm);
+   GdkPixbuf * pause_pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) &pause_xpm);
 
 # ifdef ITEMFACTORY
    item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", accel_group);
@@ -170,13 +154,15 @@ GtkWidget * create_main_window (void)
    gtk_container_add (GTK_CONTAINER (Game_menu), pause);
    gtk_widget_add_accelerator (pause, "activate", accel_group,
                                GDK_P, 0, GTK_ACCEL_VISIBLE);
-   tmp_toolbar_icon = gtk_image_new_from_stock ("gnome-stock-timer-stop", GTK_ICON_SIZE_MENU);
+   tmp_toolbar_icon = gtk_image_new_from_pixbuf (pause_pixbuf);
    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pause), tmp_toolbar_icon);
+   g_object_unref (pause_pixbuf);
 
    scores = gtk_image_menu_item_new_with_label (_("Scores"));
    gtk_container_add (GTK_CONTAINER (Game_menu), scores);
-   tmp_toolbar_icon = gtk_image_new_from_stock ("gnome-stock-scores", GTK_ICON_SIZE_MENU);
+   tmp_toolbar_icon = gtk_image_new_from_pixbuf (scores_pixbuf);
    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (scores), tmp_toolbar_icon);
+   g_object_unref (scores_pixbuf);
 
    preferences = gtk_image_menu_item_new_from_stock (GTK_STOCK_PROPERTIES, accel_group);
    gtk_container_add (GTK_CONTAINER (Game_menu), preferences);
