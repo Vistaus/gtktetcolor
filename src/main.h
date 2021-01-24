@@ -58,11 +58,11 @@
 
 struct
 {
-  gint num;
-  gint type;
-  gint color[3];
-  gint x[3];
-  gint y[3];
+   gint num;
+   gint type;
+   gint color[3];
+   gint x[3];
+   gint y[3];
 }
 block;
 

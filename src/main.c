@@ -40,6 +40,7 @@
 #include "game.h"
 #include "preferences.h"
 #include "pixmaps.h"
+#include "gtktetcolor.xpm"
 
 gint stop;
 
@@ -62,51 +63,51 @@ char *border_height_xpm[2 + MAX_CELL_SIZE * Y_SIZE];
 gchar *label_name[MAX_LABEL];
 GdkPixbuf *icon_xpm;
 
-int
-main (int argc, char *argv[])
-{
-#include "gtktetcolor.xpm"
 
+int main (int argc, char *argv[])
+{
 #ifdef ENABLE_NLS
-  bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
-  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-  textdomain (GETTEXT_PACKAGE);
+   bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
+   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+   textdomain (GETTEXT_PACKAGE);
 #endif
 
-  gtk_init (&argc, &argv);
+   gtk_init (&argc, &argv);
 
-  load_preferences ();
+   load_preferences ();
 
-  main_window = create_main_window ();
-  create_pixmaps (drawingarea, 1);
+   main_window = create_main_window ();
+   create_pixmaps (drawingarea, 1);
 
-  icon_xpm = gdk_pixbuf_new_from_xpm_data ((const char **) &gtktetcolor_xpm);
-  gtk_window_set_icon (GTK_WINDOW (main_window), icon_xpm);
+   icon_xpm = gdk_pixbuf_new_from_xpm_data ((const char **) &gtktetcolor_xpm);
+   gtk_window_set_icon (GTK_WINDOW (main_window), icon_xpm);
+   g_object_unref (G_OBJECT (icon_xpm));
 
-  srand (time (0));
+   srand (time (0));
 
-  init_game (main_window);
+   init_game (main_window);
 
-  gtk_main ();
-  before_exit ();
-  if (icon_xpm)
-    g_object_unref (G_OBJECT (icon_xpm));
-  return 0;
+   gtk_main ();
+   before_exit ();
+
+   return 0;
 }
 
-void
-before_exit (void)
+
+void before_exit (void)
 {
-  gint i;
+   gint i;
 
-  for (i = 0; i < NUMBER_COLORS + 1; i++) {
-    if (colors[i])
-      g_object_unref (colors[i]);
-  }
-  if (border_w_gdkxpm)
-    g_object_unref (border_w_gdkxpm);
-  if (border_h_gdkxpm)
-    g_object_unref (border_h_gdkxpm);
+   for (i = 0; i < NUMBER_COLORS + 1; i++) {
+      if (colors[i])
+         g_object_unref (colors[i]);
+   }
+   if (border_w_gdkxpm) {
+      g_object_unref (border_w_gdkxpm);
+   }
+   if (border_h_gdkxpm) {
+      g_object_unref (border_h_gdkxpm);
+   }
 
-  free_pixmap_chars ();
+   free_pixmap_chars ();
 }
