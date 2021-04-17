@@ -278,30 +278,39 @@ GtkWidget * create_main_window (void)
 }
 
 
-void
-create_about_dialog (void)
+void create_about_dialog (void)
 {
-   const gchar *authors[] = {
-      _("Andrey V. Panov"),
-      "<panov@canopus.iacp.dvo.ru>",
-      NULL
+   GtkWidget * w;
+   GdkPixbuf * logo;
+   const gchar * authors[] =
+   {
+       "Andrey V. Panov <panov@canopus.iacp.dvo.ru>",
+       "wdlkmpx (github)",
+       NULL
    };
-   const gchar *translator_credits = _("translator_credits");
+   /* TRANSLATORS: Replace this string with your names, one name per line. */
+   gchar * translators = _("Translated by");
 
-   GtkWidget *dialog;
-   dialog = gtk_about_dialog_new ();
-   gtk_about_dialog_set_name (GTK_ABOUT_DIALOG (dialog), "gtktetcolor");
-   gtk_about_dialog_set_version (GTK_ABOUT_DIALOG (dialog), VERSION);
-   gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG (dialog), "(C) 1999-2004");
-   gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG (dialog), _("This program is covered by the GNU GPL"));
-   gtk_about_dialog_set_website (GTK_ABOUT_DIALOG (dialog), "http://canopus.iacp.dvo.ru/~panov/gtktetcolor/");
-   gtk_about_dialog_set_authors (GTK_ABOUT_DIALOG (dialog), authors);
-   if (strcmp (translator_credits, "translator_credits"))
-      gtk_about_dialog_set_translator_credits (GTK_ABOUT_DIALOG (dialog), translator_credits);
-   gtk_about_dialog_set_logo (GTK_ABOUT_DIALOG (dialog), icon_xpm);
-   gtk_about_dialog_set_license (GTK_ABOUT_DIALOG (dialog), NULL); // Should be GPL
-   gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (main_window));
-   gtk_widget_show_all (dialog);
+   logo = icon_xpm;
+
+   w = g_object_new (GTK_TYPE_ABOUT_DIALOG,
+                     "version",      VERSION,
+                     "program-name", "gtktetcolor",
+                     "copyright",    "(C) 1999-2021",
+                     "comments",     _("GtkTetcolor is a reimplementation of tetcolor game made for DOS by S. Sotnikov in 1991"),
+                     "license",      "GPL2",
+                     "website",      "https://github.com/wdlkmpx/gtktetcolor",
+                     "authors",      authors,
+                     "logo",         logo,
+                     "translator-credits", translators,
+                     NULL);
+   gtk_container_set_border_width (GTK_CONTAINER (w), 2);
+   gtk_window_set_transient_for (GTK_WINDOW (w), GTK_WINDOW (main_window));
+   gtk_window_set_modal (GTK_WINDOW (w), TRUE);
+   gtk_window_set_position (GTK_WINDOW (w), GTK_WIN_POS_CENTER_ON_PARENT);
+
+   g_signal_connect_swapped (w, "response", G_CALLBACK (gtk_widget_destroy), w);
+   gtk_widget_show_all (GTK_WIDGET (w));
 }
 
 
