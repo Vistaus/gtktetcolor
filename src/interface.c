@@ -36,9 +36,6 @@
 #include "score.h"
 #include "preferences.h"
 
-#include "../pixmaps/scores.xpm"
-#include "../pixmaps/pause.xpm"
-
 #include "interface_menu.c"
 
 gint cell_width, initial_level, destroy_delay;
@@ -67,7 +64,6 @@ gchar *label_name[MAX_LABEL] =
 GtkWidget * create_main_window (void)
 {
    GtkWidget *vbox1;
-   GtkWidget *tmp_toolbar_icon;
    GtkAccelGroup *accel_group;
    GtkWidget *working_hbox;
    GtkWidget *left_margin_vbox;
@@ -93,9 +89,6 @@ GtkWidget * create_main_window (void)
 
    vbox1 = gtk_vbox_new (FALSE, 0);
    gtk_container_add (GTK_CONTAINER (main_window), vbox1);
-
-   GdkPixbuf * scores_pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) &scores_xpm);
-   GdkPixbuf * pause_pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) &pause_xpm);
 
    create_menubar (GTK_BOX (vbox1), GTK_WINDOW (main_window));
 
