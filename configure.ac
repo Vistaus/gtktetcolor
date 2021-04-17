@@ -1,10 +1,13 @@
+#                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_INIT([gtktetcolor], [0.6.5pre3])
-AM_CONFIG_HEADER([config.h])
+AC_INIT([gtktetcolor], [0.6.5pre3], [github.com/wdlkmpx/gtktetcolor])
+AC_CONFIG_AUX_DIR([autoconf])
+AC_CONFIG_MACRO_DIR([autoconf-m4])
 AM_INIT_AUTOMAKE([-Wall foreign])
-AC_CONFIG_MACRO_DIR([m4])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+
+AM_CONFIG_HEADER([config.h])
 m4_ifdef([AM_MAINTAINER_MODE], [AM_MAINTAINER_MODE])
 
 LT_INIT

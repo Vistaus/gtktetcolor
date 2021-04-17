@@ -2,7 +2,7 @@
 
 SUBDIRS = po src sounds
 
-ACLOCAL_AMFLAGS = -I m4
+ACLOCAL_AMFLAGS = -I autoconf-m4
 
 EXTRA_DIST = \
 	autogen.sh \

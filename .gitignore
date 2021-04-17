@@ -28,3 +28,6 @@ stamp-h1
 .libs
 .intltool-merge-cache
 src/gtktetcolor
+build-aux
+autoconf
+autoconf-m4
