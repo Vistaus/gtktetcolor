@@ -39,6 +39,8 @@
 #include "../pixmaps/scores.xpm"
 #include "../pixmaps/pause.xpm"
 
+#include "interface_menu.c"
+
 gint cell_width, initial_level, destroy_delay;
 ///#ifdef USE_GNOME
 gboolean sound_on;
@@ -62,42 +64,11 @@ gchar *label_name[MAX_LABEL] =
 };
 
 
-# ifdef ITEMFACTORY
-static GtkItemFactoryEntry menu_items[] =
-{
-   {N_("/_Game"), NULL, 0, 0, "<Branch>"},
-   {N_("/Game/_New"), NULL, on_new_activate, 0, "<StockItem>", GTK_STOCK_NEW},
-   {N_("/Game/_Pause"), "P", on_pause_activate, 0, "<Item>", NULL},
-   {N_("/Game/_Scores"), NULL, on_scores_activate, 0, "<Item>", NULL},
-   {N_("/Game/_Preferences"), NULL, on_preferences_activate, 0, "<StockItem>", GTK_STOCK_PROPERTIES},
-   {N_("/Game/_Quit"), NULL, on_quit_activate, 0, "<StockItem>", GTK_STOCK_QUIT},
-   {N_("/_Help"), NULL, 0, 0, "<Branch>", GTK_STOCK_HELP},
-   {N_("/Help/on keys"), NULL, help_on_keys_activate, 0, "<Item>", NULL},
-   {N_("/Help/_About"), NULL, create_about_dialog, 0, "<Item>", NULL}
-};
-# endif
-
-
 GtkWidget * create_main_window (void)
 {
    GtkWidget *vbox1;
-   GtkWidget *menubar1;
-   GtkWidget *Game;
-   GtkWidget *Game_menu;
-   GtkWidget *new;
-   GtkWidget *pause;
-   GtkWidget *scores;
-   GtkWidget *preferences;
-   GtkWidget *quit;
-   GtkWidget *Help;
-   GtkWidget *Help_menu;
-   GtkWidget *on_keys;
-   GtkWidget *about;
    GtkWidget *tmp_toolbar_icon;
    GtkAccelGroup *accel_group;
-# ifdef ITEMFACTORY
-   GtkItemFactory *item_factory;
-# endif
    GtkWidget *working_hbox;
    GtkWidget *left_margin_vbox;
    GtkWidget *bonus_label;
@@ -126,64 +97,7 @@ GtkWidget * create_main_window (void)
    GdkPixbuf * scores_pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) &scores_xpm);
    GdkPixbuf * pause_pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) &pause_xpm);
 
-# ifdef ITEMFACTORY
-   item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", accel_group);
-   gtk_item_factory_create_items (item_factory, G_N_ELEMENTS (menu_items), menu_items, NULL);
-   menubar1 = gtk_item_factory_get_widget (item_factory, "<main>");
-# else
-   menubar1 = gtk_menu_bar_new ();
-# endif
-   gtk_widget_show (menubar1);
-   gtk_box_pack_start (GTK_BOX (vbox1), menubar1, FALSE, TRUE, 0);
-
-# ifndef ITEMFACTORY
-   Game = gtk_image_menu_item_new_with_mnemonic (_("_Game"));
-   gtk_container_add (GTK_CONTAINER (menubar1), Game);
-
-   Game_menu = gtk_menu_new ();
-   gtk_menu_item_set_submenu (GTK_MENU_ITEM (Game), Game_menu);
-
-   new = gtk_image_menu_item_new_with_mnemonic (_("_New game"));
-   gtk_container_add (GTK_CONTAINER (Game_menu), new);
-   gtk_widget_add_accelerator (new, "activate", accel_group,
-                               GDK_N, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
-   tmp_toolbar_icon = gtk_image_new_from_stock (GTK_STOCK_NEW, GTK_ICON_SIZE_MENU);
-   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (new), tmp_toolbar_icon);
-
-   pause = gtk_image_menu_item_new_with_mnemonic (_("_Pause"));
-   gtk_container_add (GTK_CONTAINER (Game_menu), pause);
-   gtk_widget_add_accelerator (pause, "activate", accel_group,
-                               GDK_P, 0, GTK_ACCEL_VISIBLE);
-   tmp_toolbar_icon = gtk_image_new_from_pixbuf (pause_pixbuf);
-   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pause), tmp_toolbar_icon);
-   g_object_unref (pause_pixbuf);
-
-   scores = gtk_image_menu_item_new_with_label (_("Scores"));
-   gtk_container_add (GTK_CONTAINER (Game_menu), scores);
-   tmp_toolbar_icon = gtk_image_new_from_pixbuf (scores_pixbuf);
-   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (scores), tmp_toolbar_icon);
-   g_object_unref (scores_pixbuf);
-
-   preferences = gtk_image_menu_item_new_from_stock (GTK_STOCK_PROPERTIES, accel_group);
-   gtk_container_add (GTK_CONTAINER (Game_menu), preferences);
-
-   quit = gtk_image_menu_item_new_from_stock (GTK_STOCK_QUIT, accel_group);
-   gtk_container_add (GTK_CONTAINER (Game_menu), quit);
-
-   Help = gtk_image_menu_item_new_from_stock (GTK_STOCK_HELP, accel_group);
-   gtk_container_add (GTK_CONTAINER (menubar1), Help);
-
-   Help_menu = gtk_menu_new ();
-   gtk_menu_item_set_submenu (GTK_MENU_ITEM (Help), Help_menu);
-
-   on_keys = gtk_image_menu_item_new_with_label (_("on keys"));
-   gtk_container_add (GTK_CONTAINER (Help_menu), on_keys);
-
-   about = gtk_image_menu_item_new_with_mnemonic (_("_About"));
-   gtk_container_add (GTK_CONTAINER (Help_menu), about);
-   tmp_toolbar_icon = gtk_image_new_from_stock (GTK_STOCK_ABOUT, GTK_ICON_SIZE_MENU);
-   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (about), tmp_toolbar_icon);
-# endif
+   create_menubar (GTK_BOX (vbox1), GTK_WINDOW (main_window));
 
    working_hbox = gtk_hbox_new (FALSE, 0);
    gtk_box_pack_start (GTK_BOX (vbox1), working_hbox, TRUE, TRUE, 0);
@@ -251,22 +165,6 @@ GtkWidget * create_main_window (void)
                      G_CALLBACK (on_main_window_delete_event), NULL);
    g_signal_connect (G_OBJECT (main_window), "key-press-event",
                      G_CALLBACK (on_main_window_key_press_event), NULL);
-#if !defined (ITEMFACTORY)
-   g_signal_connect (GTK_WIDGET (new), "activate",
-                     G_CALLBACK (on_new_activate), NULL);
-   g_signal_connect (GTK_WIDGET (pause), "activate",
-                     G_CALLBACK (on_pause_activate), NULL);
-   g_signal_connect (GTK_WIDGET (scores), "activate",
-                     G_CALLBACK (on_scores_activate), NULL);
-   g_signal_connect (GTK_WIDGET (preferences), "activate",
-                     G_CALLBACK (on_preferences_activate), NULL);
-   g_signal_connect (GTK_WIDGET (quit), "activate",
-                     G_CALLBACK (on_quit_activate), NULL);
-   g_signal_connect (GTK_WIDGET (on_keys), "activate",
-                     G_CALLBACK (help_on_keys_activate), NULL);
-   g_signal_connect (GTK_WIDGET (about), "activate",
-                     G_CALLBACK (create_about_dialog), NULL);
-#endif
    g_signal_connect (G_OBJECT (drawingarea), "expose-event",
                      G_CALLBACK (on_drawingarea_expose_event), NULL);
 
