@@ -91,4 +91,5 @@ GtkWidget *main_window;
 GtkWidget *drawingarea;
 
 
+char * get_config_dir_file (const char * file);
 void before_exit (void);

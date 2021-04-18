@@ -23,17 +23,7 @@
 #include "score.h"
 #include "interface.h"
 
-
-/*
- * Choose path and filename of score and preferences files in non-Gnome version
- */
-
-static char * choose_score_file (void)
-{ // returns a string that must be freed
-   const char * home_dir = g_getenv ("HOME");
-   gchar *score_path = g_strconcat (home_dir, G_DIR_SEPARATOR_S, ".gtktetcolor_score", NULL);
-   return (score_path);
-}
+#define SCORE_FILE "gtktetcolor_score"
 
 
 gboolean read_score (void)
@@ -41,11 +31,11 @@ gboolean read_score (void)
    gint i, j;
    gint cksum;
    struct stat file_info;
-   char * score_path = choose_score_file ();
+   char * score_path = get_config_dir_file (SCORE_FILE);
    FILE * score_file;
 
    if ((score_file = fopen (score_path, "r")) == NULL) {
-      g_print ("\ncannot read file %s\n", score_path);
+      /* g_print ("\ncannot read file %s\n", score_path); */
       g_free (score_path);
       return FALSE;
    }
@@ -88,7 +78,7 @@ gboolean read_score (void)
 gboolean write_score (void)
 {
    gint i;
-   char * score_path = choose_score_file ();
+   char * score_path = get_config_dir_file (SCORE_FILE);
    FILE * score_file;
 
    score_file = fopen (score_path, "w");

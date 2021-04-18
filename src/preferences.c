@@ -27,6 +27,8 @@
 #include "preferences.h"
 #include "pixmaps.h"
 
+#define PREFS_FILE "gtktetcolorrc"
+
 gint cell_width, left_margin, initial_level, destroy_delay;
 ///#ifdef USE_GNOME
 gboolean sound_on;
@@ -36,14 +38,6 @@ gchar *font_name;
 gchar *label_name[MAX_LABEL];	/* Label identifiers */
 
 gboolean preferences_changed;
-
-static char * get_pref_file_path (void)
-{ // returns a string that must be freed
-   const char * home_dir = g_getenv ("HOME");
-   gchar *rcfile_path = g_strconcat (home_dir, G_DIR_SEPARATOR_S, ".gtktetcolorrc", NULL);
-   return (rcfile_path);
-}
-
 
 void change_preferences (GtkWidget * widget)
 {
@@ -161,7 +155,7 @@ void load_preferences ()
 {
    int temp;
    FILE *rcfile;
-   char *rcfile_path = get_pref_file_path ();
+   char *rcfile_path = get_config_dir_file (PREFS_FILE);
    gchar *str;
    int i;
 #ifdef HAVE_GETLINE
@@ -179,7 +173,7 @@ void load_preferences ()
 #endif
    rcfile = fopen (rcfile_path, "r");
    if (rcfile == NULL) {
-      g_print ("\ncannot open rc file for reading\n");
+      /* g_print ("\ncannot open rc file for reading\n"); */
    } else {
       for (i = 0; !feof (rcfile) && i <= 5; i++)
       {
@@ -248,7 +242,7 @@ void load_preferences ()
 void save_preferences (void)
 {
    FILE *rcfile;
-   char *rcfile_path = get_pref_file_path ();
+   char *rcfile_path = get_config_dir_file (PREFS_FILE);
    rcfile = fopen (rcfile_path, "w");
 
    if (rcfile == NULL) {

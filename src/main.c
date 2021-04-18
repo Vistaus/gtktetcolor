@@ -54,6 +54,29 @@ gchar *label_name[MAX_LABEL];
 GdkPixbuf *icon_xpm;
 
 
+#define P_DIR "games"
+char * get_config_dir_file (const char * file)
+{
+   /* returns a path that must be freed with g_free */
+   char * config_home, * res;
+#if __MINGW32__
+   config_home = getenv ("LOCALAPPDATA"); /* XP */
+   if (!config_home) {
+      config_home = getenv ("APPDATA");
+   }
+#else
+   config_home = getenv ("XDG_CONFIG_HOME");
+#endif
+   if (config_home) {
+      res = g_build_filename (config_home, P_DIR, file, NULL);
+   } else {
+      res = g_build_filename (g_get_home_dir(), ".config", P_DIR, file, NULL);
+   }
+   return res;
+}
+
+/* ============================================================================= */
+
 int main (int argc, char *argv[])
 {
 #ifdef ENABLE_NLS
@@ -63,6 +86,11 @@ int main (int argc, char *argv[])
 #endif
 
    gtk_init (&argc, &argv);
+
+   /* Make sure confdir exists */
+   char * confdir = get_config_dir_file (NULL);
+   g_mkdir_with_parents (confdir, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+   g_free (confdir);
 
    load_preferences ();
 
@@ -83,6 +111,7 @@ int main (int argc, char *argv[])
    return 0;
 }
 
+/* ============================================================================= */
 
 void before_exit (void)
 {
