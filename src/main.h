@@ -17,6 +17,20 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
+
+
+
 #define X_SIZE 7
 #define Y_SIZE 18
 #define NUMBER_COLORS 7
@@ -27,10 +41,6 @@
 #define border 2
 #define MAX_CELL_SIZE 80
 #define MAX_DESTROY_DELAY 150
-
-#ifdef HAVE_CONFIG_H
-#  include <config.h>
-#endif
 
 /*
  * Standard gettext macros.

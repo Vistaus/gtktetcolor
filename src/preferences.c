@@ -17,15 +17,9 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
-#include <stdlib.h>
-#include <gdk/gdkkeysyms.h>
-#include <stdio.h>
-#include <string.h>
+#include "main.h"
 #include <pango/pango.h>
 
-#include "main.h"
 #include "callbacks.h"
 #include "interface.h"
 #include "score.h"

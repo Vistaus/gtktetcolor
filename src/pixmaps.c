@@ -17,15 +17,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <gtk/gtk.h>
-#include <string.h>
-#include <stdlib.h>
-#include <time.h>
-#include <stdio.h>
-#include <sys/stat.h>
-#include <gdk/gdkkeysyms.h>
-
 #include "main.h"
+#include <time.h>
+#include <sys/stat.h>
+
 #include "interface.h"
 #include "callbacks.h"
 #include "score.h"

@@ -17,19 +17,13 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <gtk/gtk.h>
-#include <string.h>
-#include <stdlib.h>
+#include "main.h"
 #include <time.h>
-#include <stdio.h>
 #include <sys/stat.h>
-#include <gdk/gdkkeysyms.h>
-#include <glib/gi18n.h>
 // #ifdef ENABLE_NLS
 // # include <locale.h>
 // #endif
 
-#include "main.h"
 #include "interface.h"
 #include "callbacks.h"
 #include "score.h"
