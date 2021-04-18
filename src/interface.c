@@ -17,10 +17,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifdef HAVE_CONFIG_H
-#  include <config.h>
-#endif
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -30,9 +26,9 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
+#include "main.h"
 #include "callbacks.h"
 #include "interface.h"
-#include "main.h"
 #include "score.h"
 #include "preferences.h"
 

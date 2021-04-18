@@ -17,10 +17,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifdef HAVE_CONFIG_H
-#  include <config.h>
-#endif
-
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
@@ -29,9 +25,9 @@
 #include <string.h>
 #include <pango/pango.h>
 
+#include "main.h"
 #include "callbacks.h"
 #include "interface.h"
-#include "main.h"
 #include "score.h"
 #include "game.h"
 #include "preferences.h"
