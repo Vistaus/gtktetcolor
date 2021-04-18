@@ -186,7 +186,7 @@ gboolean redraw_cells ()
          if (cell_state_prev[i][j] != cell_state_)
          {
             gdk_draw_pixbuf (drawingarea->window,
-                             drawingarea->style->fg_gc[GTK_WIDGET_STATE (drawingarea)],
+                             drawingarea->style->fg_gc[gtk_widget_get_state (drawingarea)],
                              colors[cell_state_],
                              0, 0,
                              border + i * cell_width,
@@ -206,7 +206,7 @@ gboolean redraw_all_cells ()
 
    for (i = 0; i < 2; i++) {
       gdk_draw_pixbuf (drawingarea->window,
-                       drawingarea->style->fg_gc[GTK_WIDGET_STATE (drawingarea)],
+                       drawingarea->style->fg_gc[gtk_widget_get_state (drawingarea)],
                        border_w_gdkxpm,
                        0, 0,
                        0, i * (border + Y_SIZE * cell_width),
@@ -216,7 +216,7 @@ gboolean redraw_all_cells ()
 
    for (i = 0; i < 2; i++) {
       gdk_draw_pixbuf (drawingarea->window,
-                       drawingarea->style->fg_gc[GTK_WIDGET_STATE (drawingarea)],
+                       drawingarea->style->fg_gc[gtk_widget_get_state (drawingarea)],
                        border_h_gdkxpm,
                        0, 0,
                        i * (X_SIZE * cell_width + border), border,
@@ -227,7 +227,7 @@ gboolean redraw_all_cells ()
    for (j = 0; j < Y_SIZE; j++) {
       for (i = 0; i < X_SIZE; i++) {
          gdk_draw_pixbuf (drawingarea->window,
-                          drawingarea->style->fg_gc[GTK_WIDGET_STATE (drawingarea)],
+                          drawingarea->style->fg_gc[gtk_widget_get_state (drawingarea)],
                           colors[cell_state[i][j]], 0,
                           0, border + i * cell_width,
                           border + j * cell_width, cell_width, cell_width,
