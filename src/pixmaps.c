@@ -30,13 +30,9 @@
 gint stop;
 gint cell_width, initial_level, max_score, use_graykeys;
 gint nav_keys[4], alt_nav_keys[4];
-GdkFont *font;
-gchar *font_name;
 
-GdkPixbuf *colors[NUMBER_COLORS + 1], *border_w_gdkxpm, *border_h_gdkxpm;
+GdkPixbuf *colors[NUMBER_COLORS + 1];
 static char *color[NUMBER_COLORS + 1][MAX_CELL_SIZE + 3];
-char *border_width_xpm[2 + border];
-char *border_height_xpm[2 + MAX_CELL_SIZE * Y_SIZE];
 gchar *label_name[MAX_LABEL];
 
 
@@ -44,7 +40,6 @@ gboolean create_pixmaps (GtkWidget * widget, gint first_time)
 {
    gint i, j;
    gchar cell_size_char[20];
-   gchar border_line_width[cell_width * X_SIZE + 2 * border + 1];
    gchar cell_core[MAX_CELL_SIZE + 1], cell_border[MAX_CELL_SIZE + 1];
    static gchar *color_name[NUMBER_COLORS + 1] = { "gray25",
       "blue",
@@ -79,11 +74,6 @@ gboolean create_pixmaps (GtkWidget * widget, gint first_time)
       color[1][4] = (gchar *) g_malloc (MAX_CELL_SIZE + 1);
       for (i = 0; i < NUMBER_COLORS + 1; i++)
          color[i][2] = (gchar *) g_malloc (MAX_CELL_SIZE + 1);
-      border_width_xpm[0] = (gchar *) g_malloc (20);
-      border_width_xpm[1] = (gchar *) g_malloc (20);
-      border_height_xpm[0] = (gchar *) g_malloc (20);
-      border_width_xpm[2] = (gchar *) g_malloc (MAX_CELL_SIZE * X_SIZE + 2 * border + 1);
-      border_height_xpm[2] = (gchar *) g_malloc (border + 1);
 
       strcpy (color[0][1], "       c None");
       strcpy (color[0][2], "+      c gray25");
@@ -97,10 +87,6 @@ gboolean create_pixmaps (GtkWidget * widget, gint first_time)
          strcpy (color[i][2], "@      c ");
          strcat (color[i][2], color_name[i]);
       }
-
-      strcpy (border_width_xpm[1], ".      c gold");
-      border_height_xpm[1] = border_width_xpm[1];
-      strcpy (border_height_xpm[2], "..");
    }
 
    /* background pixmap */
@@ -128,22 +114,6 @@ gboolean create_pixmaps (GtkWidget * widget, gint first_time)
       }
    }
 
-   /* border pixmaps */
-   g_snprintf (border_width_xpm[0], 20, "%d %d 1 1",
-   cell_width * X_SIZE + 2 * border, border);
-   for (i = 0; i < cell_width * X_SIZE + 2 * border; i++) {
-      border_line_width[i] = '.';
-   }
-   border_line_width[cell_width * X_SIZE + 2 * border] = '\0';
-   strcpy (border_width_xpm[2], border_line_width);
-   border_width_xpm[3] = border_width_xpm[2];
-
-   g_snprintf (border_height_xpm[0], 20, "%d %d 1 1",
-   border, cell_width * Y_SIZE);
-   for (i = 3; i < cell_width * Y_SIZE + 2; i++) {
-      border_height_xpm[i] = border_height_xpm[2];
-   }
-
    for (i = 0; i < NUMBER_COLORS + 1; i++) {
       if (colors[i]) {
          g_object_unref (colors[i]);
@@ -151,15 +121,6 @@ gboolean create_pixmaps (GtkWidget * widget, gint first_time)
       colors[i] = gdk_pixbuf_new_from_xpm_data ((const char **) &color[i]);
    }
 
-   if (border_w_gdkxpm) {
-      g_object_unref (border_w_gdkxpm);
-   }
-   border_w_gdkxpm = gdk_pixbuf_new_from_xpm_data ((const char **) &border_width_xpm);
-
-   if (border_h_gdkxpm) {
-      g_object_unref (border_h_gdkxpm);
-   }
-   border_h_gdkxpm = gdk_pixbuf_new_from_xpm_data ((const char **) &border_height_xpm);
    gtk_widget_set_size_request (widget, X_SIZE * cell_width + 2 * border,
                                 Y_SIZE * cell_width + 2 * border);
    return TRUE;
@@ -195,25 +156,17 @@ gboolean redraw_all_cells ()
 {
    gint i, j;
 
-   for (i = 0; i < 2; i++) {
-      gdk_draw_pixbuf (drawingarea->window,
-                       drawingarea->style->fg_gc[gtk_widget_get_state (drawingarea)],
-                       border_w_gdkxpm,
-                       0, 0,
-                       0, i * (border + Y_SIZE * cell_width),
-                       cell_width * X_SIZE + 2 * border, border,
-                       GDK_RGB_DITHER_NONE, 0, 0);
-   }
+   GdkWindow * gsurface = gtk_widget_get_window (drawingarea);
+   cairo_t * cr = gdk_cairo_create (gsurface);
 
-   for (i = 0; i < 2; i++) {
-      gdk_draw_pixbuf (drawingarea->window,
-                       drawingarea->style->fg_gc[gtk_widget_get_state (drawingarea)],
-                       border_h_gdkxpm,
-                       0, 0,
-                       i * (X_SIZE * cell_width + border), border,
-                       border, cell_width * Y_SIZE,
-                       GDK_RGB_DITHER_NONE, 0, 0);
-   }
+   int width  = gtk_widget_get_allocated_width (drawingarea);
+   int height = gtk_widget_get_allocated_height (drawingarea);
+
+   cairo_set_source_rgba (cr, 1.0, 0.0, 0.0, 1.0);
+   cairo_set_line_width (cr, 4.0);
+   cairo_rectangle (cr, 0.0, 0.0, width, height);
+   cairo_stroke (cr);
+   cairo_destroy (cr);
 
    for (j = 0; j < Y_SIZE; j++) {
       for (i = 0; i < X_SIZE; i++) {
@@ -242,9 +195,4 @@ void free_pixmap_chars (void)
    for (i = 0; i < NUMBER_COLORS + 1; i++) {
       g_free (color[i][2]);
    }
-   g_free (border_width_xpm[0]);
-   g_free (border_width_xpm[1]);
-   g_free (border_height_xpm[0]);
-   g_free (border_width_xpm[2]);
-   g_free (border_height_xpm[2]);
 }

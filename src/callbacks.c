@@ -30,8 +30,6 @@ gint cell_width, left_margin, initial_level;
 gboolean sound_on;
 ///#endif
 GtkStyle *label_style;
-GdkFont *font;
-gchar *font_name;
 gchar *label_name[MAX_LABEL];	/* Label identifiers */
 
 gboolean preferences_changed;
