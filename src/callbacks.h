@@ -31,8 +31,8 @@ void on_pause_activate (GtkWidget * menuitem, gpointer user_data);
 void help_on_keys_activate (GtkWidget * menuitem, gpointer user_data);
 void on_preferences_activate (GtkWidget * menuitem, gpointer user_data);
 
-void on_name_response (GtkObject * obj, gpointer user_data);
-void on_pause_response (GtkObject * param, gpointer user_data);
+void on_name_response (GtkDialog * dlg, int response, gpointer user_data);
+void on_pause_response (GtkDialog * dlg, int response, gpointer user_data);
 void preferences_dialog_response (GtkDialog * dialog, gint response_id, gpointer data);
 
 void on_font_ok_button_clicked (GtkButton * button, gpointer user_data);

@@ -137,13 +137,12 @@ on_main_window_key_press_event (GtkWidget * widget, GdkEventKey * event, gpointe
 }
 
 
-void
-on_name_response (GtkObject * obj, gpointer user_data)
+void on_name_response (GtkDialog * dlg, int response, gpointer user_data)
 {
    GtkWidget *widget;
    gchar *str;
 
-   widget = (GtkWidget *) g_object_get_data (G_OBJECT (obj), "name_entry");
+   widget = (GtkWidget *) g_object_get_data (G_OBJECT (dlg), "name_entry");
    str = g_strdup (gtk_entry_get_text (GTK_ENTRY (widget)));
    if (strlen (str) == 0) {
       str = g_strdup (g_get_real_name ());
@@ -165,21 +164,17 @@ on_name_response (GtkObject * obj, gpointer user_data)
    strcpy (name[name_i], new_name);
    saved_score[name_i] = score;
    write_score ();
-   gtk_widget_destroy ((GtkWidget *) obj);
+   gtk_widget_destroy (GTK_WIDGET (dlg));
 }
 
 
-void
-on_pause_response (GtkObject * param, gpointer user_data)
+void on_pause_response (GtkDialog * dlg, int response, gpointer user_data)
 {
-   GtkWidget *pause_dialog;
-
    continue_game = 1;
-   pause_dialog = (GtkWidget *) param;
    interval = INI_INTERVAL - INI_INTERVAL * (level - 1) / 10;
    timeout = g_timeout_add (interval, (GSourceFunc) timeout_callback, main_window);
    level_timeout = g_timeout_add (LEVEL_INT, (GSourceFunc) change_level, main_window);
-   gtk_widget_destroy (pause_dialog);
+   gtk_widget_destroy (GTK_WIDGET (dlg));
 }
 
 void

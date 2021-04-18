@@ -209,10 +209,11 @@ void create_about_dialog (void)
 void
 create_scores_dialog (void)
 {
-   GtkWidget *dialog;
+   GtkWidget *dialog, * main_vbox;
    GtkWidget *scores_frame;
    GtkWidget *scores_table;
    GtkWidget *name_label[10], *score_label[10];
+   float xalign, yalign;
    gint i;
    gchar str[10];
 
@@ -223,12 +224,13 @@ create_scores_dialog (void)
                        GTK_STOCK_OK, GTK_RESPONSE_NONE, NULL);
    gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 
-   g_signal_connect_swapped (GTK_OBJECT (dialog), "response",
+   g_signal_connect_swapped (dialog, "response",
                             G_CALLBACK (gtk_widget_destroy),
-                            GTK_OBJECT (dialog));
+                            dialog);
 
+   main_vbox = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
    scores_frame = gtk_frame_new (_("Hall of fame"));
-   gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), scores_frame);
+   gtk_container_add (GTK_CONTAINER (main_vbox), scores_frame);
    gtk_container_set_border_width (GTK_CONTAINER (scores_frame), 5);
 
    scores_table = gtk_table_new (10, 2, FALSE);
@@ -236,16 +238,18 @@ create_scores_dialog (void)
    gtk_container_set_border_width (GTK_CONTAINER (scores_table), 10);
    gtk_table_set_col_spacings (GTK_TABLE (scores_table), 20);
    gtk_table_set_row_spacings (GTK_TABLE (scores_table), 5);
-
+   
    read_score ();
    for (i = 0; i < 10; i++) {
       name_label[i] = gtk_label_new (name[i]);
       g_snprintf (str, 10, "%d", saved_score[i]);
       score_label[i] = gtk_label_new (str);
       gtk_table_attach_defaults (GTK_TABLE (scores_table), name_label[i], 0, 1, i, i + 1);
-      gtk_misc_set_alignment (GTK_MISC (name_label[i]), 0., GTK_MISC (name_label[i])->yalign);
+      gtk_misc_get_alignment (GTK_MISC (name_label[i]), &xalign, &yalign);
+      gtk_misc_set_alignment (GTK_MISC (name_label[i]), 0., yalign);
       gtk_table_attach_defaults (GTK_TABLE (scores_table), score_label[i], 1, 2, i, i + 1);
-      gtk_misc_set_alignment (GTK_MISC (score_label[i]), 1., GTK_MISC (score_label[i])->yalign);
+      gtk_misc_get_alignment (GTK_MISC (score_label[i]), &xalign, &yalign);
+      gtk_misc_set_alignment (GTK_MISC (score_label[i]), 1., yalign);
    }
 
    gtk_widget_show_all (dialog);
@@ -254,7 +258,7 @@ create_scores_dialog (void)
 
 void create_name_dialog (void)
 {
-   GtkWidget *dialog;
+   GtkWidget *dialog, * main_vbox;
    GtkWidget *name_frame;
    GtkWidget *name_entry;
 
@@ -265,13 +269,14 @@ void create_name_dialog (void)
                        GTK_STOCK_OK, GTK_RESPONSE_NONE, NULL);
    gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 
-   g_signal_connect_swapped (GTK_OBJECT (dialog), "response",
+   g_signal_connect_swapped (dialog, "response",
                              G_CALLBACK (on_name_response),
-                             GTK_OBJECT (dialog));
+                             dialog);
 
+   main_vbox = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
    name_frame = gtk_frame_new (_("Enter your name"));
    gtk_container_set_border_width (GTK_CONTAINER (name_frame), 5);
-   gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), name_frame);
+   gtk_container_add (GTK_CONTAINER (main_vbox), name_frame);
 
    name_entry = gtk_entry_new ();
    gtk_entry_set_max_length (GTK_ENTRY (name_entry), 255);
@@ -289,7 +294,7 @@ void create_name_dialog (void)
 void
 create_pause_dialog (void)
 {
-   GtkWidget *dialog;
+   GtkWidget *dialog, * main_vbox;
    GtkWidget *label;
 
    dialog = gtk_dialog_new_with_buttons (_("Game is paused"),
@@ -299,15 +304,16 @@ create_pause_dialog (void)
                        GTK_STOCK_OK, GTK_RESPONSE_NONE, NULL);
    gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 
-   g_signal_connect_swapped (GTK_OBJECT (dialog), "response",
+   g_signal_connect_swapped (dialog, "response",
                              G_CALLBACK (on_pause_response),
-                             GTK_OBJECT (dialog));
+                             dialog);
 
    label = gtk_label_new (_("Gtktetcolor is paused"));
 
    gtk_misc_set_padding (GTK_MISC (label), 10, 10);
 
-   gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), label);
+   main_vbox = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+   gtk_container_add (GTK_CONTAINER (main_vbox), label);
    gtk_widget_show_all (dialog);
 }
 
@@ -315,7 +321,7 @@ create_pause_dialog (void)
 void
 create_help_dialog (void)
 {
-   GtkWidget *dialog;
+   GtkWidget *dialog, * main_vbox;
    GtkWidget *label;
 
    dialog = gtk_dialog_new_with_buttons (_("Help on keys"),
@@ -324,9 +330,9 @@ create_help_dialog (void)
                        GTK_STOCK_OK, GTK_RESPONSE_NONE, NULL);
    gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 
-   g_signal_connect_swapped (GTK_OBJECT (dialog), "response",
+   g_signal_connect_swapped (dialog, "response",
                              G_CALLBACK (gtk_widget_destroy),
-                             GTK_OBJECT (dialog));
+                             dialog);
 
    label = gtk_label_new (_(
                        "Left arrow  / Num 4 - shift block left\n"
@@ -337,26 +343,27 @@ create_help_dialog (void)
 
    gtk_misc_set_padding (GTK_MISC (label), 10, 10);
 
-   gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), label);
+   main_vbox = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+   gtk_container_add (GTK_CONTAINER (main_vbox), label);
    gtk_widget_show_all (dialog);
 }
 
 
 void create_preferences_dialog (void)
 {
-   GtkWidget *preferences_dialog;
+   GtkWidget *preferences_dialog, * main_vbox;
    GtkWidget *preferences_vbox;
    GtkWidget *preferences_hbox1;
    GtkWidget *cell_size_label;
-   GtkObject *cell_size_spinbutton_adj;
+   GtkAdjustment *cell_size_spinbutton_adj;
    GtkWidget *cell_size_spinbutton;
    GtkWidget *preferences_hbox2;
    GtkWidget *initial_level_label;
-   GtkObject *initial_level_spinbutton_adj;
+   GtkAdjustment *initial_level_spinbutton_adj;
    GtkWidget *initial_level_spinbutton;
    GtkWidget *preferences_destroy_delay_hbox;
    GtkWidget *destroy_delay_label;
-   GtkObject *destroy_delay_spinbutton_adj;
+   GtkAdjustment *destroy_delay_spinbutton_adj;
    GtkWidget *destroy_delay_spinbutton;
    GtkWidget *preferences_hbox3;
    GtkWidget *prefs_notebook;
@@ -375,12 +382,13 @@ void create_preferences_dialog (void)
                             GTK_STOCK_OK, GTK_RESPONSE_OK,
                             GTK_STOCK_APPLY, GTK_RESPONSE_APPLY,
                             GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE, NULL);
-   g_signal_connect_swapped (GTK_OBJECT (preferences_dialog), "response",
+   g_signal_connect_swapped (preferences_dialog, "response",
                              G_CALLBACK (preferences_dialog_response),
-                             GTK_OBJECT (preferences_dialog));
+                             preferences_dialog);
 
+   main_vbox = gtk_dialog_get_content_area (GTK_DIALOG (preferences_dialog));
    prefs_notebook = gtk_notebook_new ();
-   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (preferences_dialog)->vbox), prefs_notebook, FALSE, TRUE, 10);
+   gtk_box_pack_start (GTK_BOX (main_vbox), prefs_notebook, FALSE, TRUE, 10);
 
    preferences_vbox = gtk_vbox_new (FALSE, 5);
    options_label = gtk_label_new (_("Game options"));
@@ -405,8 +413,8 @@ void create_preferences_dialog (void)
    cell_size_label = gtk_label_new (_("Cell size: "));
    gtk_box_pack_start (GTK_BOX (preferences_hbox1), cell_size_label, FALSE, FALSE, 10);
 
-   cell_size_spinbutton_adj = gtk_adjustment_new ((gfloat) cell_width, 10, MAX_CELL_SIZE, 1, 10, 10);
-   cell_size_spinbutton = gtk_spin_button_new (GTK_ADJUSTMENT (cell_size_spinbutton_adj), 1, 0);
+   cell_size_spinbutton_adj = GTK_ADJUSTMENT (gtk_adjustment_new ((gfloat) cell_width, 10, MAX_CELL_SIZE, 1, 10, 10));
+   cell_size_spinbutton = gtk_spin_button_new (cell_size_spinbutton_adj, 1, 0);
    g_object_set_data_full (G_OBJECT (preferences_dialog), "cell_size_spinbutton", cell_size_spinbutton, NULL);
 
    gtk_box_pack_start (GTK_BOX (preferences_hbox1), cell_size_spinbutton, FALSE, TRUE, 10);
@@ -417,8 +425,8 @@ void create_preferences_dialog (void)
    initial_level_label = gtk_label_new (_("Initial level: "));
    gtk_box_pack_start (GTK_BOX (preferences_hbox2), initial_level_label, FALSE, FALSE, 10);
 
-   initial_level_spinbutton_adj = gtk_adjustment_new ((gfloat) initial_level, 1, 9, 1, 10, 10);
-   initial_level_spinbutton = gtk_spin_button_new (GTK_ADJUSTMENT (initial_level_spinbutton_adj), 1, 0);
+   initial_level_spinbutton_adj = GTK_ADJUSTMENT (gtk_adjustment_new ((gfloat) initial_level, 1, 9, 1, 10, 10));
+   initial_level_spinbutton = gtk_spin_button_new (initial_level_spinbutton_adj, 1, 0);
    g_object_set_data_full (G_OBJECT (preferences_dialog), "initial_level_spinbutton", initial_level_spinbutton, NULL);
    gtk_box_pack_start (GTK_BOX (preferences_hbox2), initial_level_spinbutton, FALSE, TRUE, 10);
 
@@ -428,8 +436,8 @@ void create_preferences_dialog (void)
    destroy_delay_label = gtk_label_new (_("Delay before cell destroying, ms: "));
    gtk_box_pack_start (GTK_BOX (preferences_destroy_delay_hbox), destroy_delay_label, FALSE, FALSE, 10);
 
-   destroy_delay_spinbutton_adj = gtk_adjustment_new ((gfloat) destroy_delay, 5, MAX_DESTROY_DELAY, 5, 10, 10);
-   destroy_delay_spinbutton = gtk_spin_button_new (GTK_ADJUSTMENT (destroy_delay_spinbutton_adj), 1, 0);
+   destroy_delay_spinbutton_adj = GTK_ADJUSTMENT (gtk_adjustment_new ((gfloat) destroy_delay, 5, MAX_DESTROY_DELAY, 5, 10, 10));
+   destroy_delay_spinbutton = gtk_spin_button_new (destroy_delay_spinbutton_adj, 1, 0);
    g_object_set_data_full (G_OBJECT (preferences_dialog), "destroy_delay_spinbutton", destroy_delay_spinbutton, NULL);
    gtk_box_pack_start (GTK_BOX (preferences_destroy_delay_hbox), destroy_delay_spinbutton, FALSE, TRUE, 10);
 
