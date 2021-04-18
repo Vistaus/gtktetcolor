@@ -218,6 +218,7 @@ gboolean timeout_callback (gpointer window)
    gchar score_text[10], bonus_text[10], max_score_text[10];
    gchar *status_text, *status_score;
    gint i;
+   static const char * text_color = NULL;
 
    score_label_number = (GtkWidget *) g_object_get_data (G_OBJECT (window), label_name[5]);
    max_score_number_label = (GtkWidget *) g_object_get_data (G_OBJECT (window), label_name[7]);
@@ -232,92 +233,54 @@ gboolean timeout_callback (gpointer window)
       max_score = max_score > score ? max_score : score;
       g_snprintf (score_text, 10, "%d", score);
       g_snprintf (max_score_text, 10, "%d", max_score);
-      gtk_label_set_text (GTK_LABEL (score_label_number), score_text);
-      gtk_label_set_text (GTK_LABEL (max_score_number_label), max_score_text);
       for (i = current_score_number - 1; i >= 0; i--) {
-         if (score <= saved_score[i])
-         break;
+         if (score <= saved_score[i]) {
+            break;
+         }
       }
       if (i + 1 != current_score_number)
       {
-         GdkColormap *cmap;
-         GdkColor text_color;
-         GtkStyle *newstyle =
-         gtk_style_copy (gtk_widget_get_style (score_label_number));
          current_score_number = i + 1;
 
-         /*      cmap = gdk_colormap_get_system (); */
-         cmap = gdk_drawable_get_colormap (score_label_number->window);
          switch (current_score_number)
          {
             case 9:
-               text_color.red = 0x7fff;
-               text_color.green = 0;
-               text_color.blue = 0xffff;
-               break;
             case 8:
-               text_color.red = 0;
-               text_color.green = 0;
-               text_color.blue = 0xffff;
-               break;
             case 7:
-               text_color.red = 0;
-               text_color.green = 0x7fff;
-               text_color.blue = 0xffff;
+               text_color = "red";
                break;
             case 6:
-               text_color.red = 0;
-               text_color.green = 0xffff;
-               text_color.blue = 0xffff;
-               break;
             case 5:
-               text_color.red = 0;
-               text_color.green = 0xffff;
-               text_color.blue = 0x7fff;
-               break;
             case 4:
-               text_color.red = 0;
-               text_color.green = 0xffff;
-               text_color.blue = 0;
+               text_color = "blue";
                break;
             case 3:
-               text_color.red = 0x7fff;
-               text_color.green = 0xffff;
-               text_color.blue = 0;
-               break;
             case 2:
-               text_color.red = 0xffff;
-               text_color.green = 0xffff;
-               text_color.blue = 0;
-               break;
             case 1:
-               text_color.red = 0xffff;
-               text_color.green = 0x7fff;
-               text_color.blue = 0;
+               text_color = "brown";
                break;
             case 0:
-               text_color.red = 0xffff;
-               text_color.green = 0;
-               text_color.blue = 0;
+               text_color = "purple";
                break;
          }
-         if (!gdk_colormap_alloc_color (cmap, &text_color, TRUE, TRUE)) {
-            g_warning ("couldn't allocate color");
-            goto nocolor;
-         }
-         newstyle->fg[0] = text_color;
-         gtk_widget_set_style (score_label_number, newstyle);
-         gdk_colormap_free_colors (cmap, &text_color, 1);
       }
 
-   nocolor:
+      if (text_color) {
+         /* puts (text_color); */
+         char * markup;
+         markup = g_markup_printf_escaped ("<b><span foreground=\"%s\">%s</span></b>",
+                                           text_color, score_text);
+         gtk_label_set_markup (GTK_LABEL (score_label_number), markup);
+         g_free (markup);
+      } else {
+         gtk_label_set_text (GTK_LABEL (score_label_number), score_text);
+      }
+      gtk_label_set_text (GTK_LABEL (max_score_number_label), max_score_text);
+
       statusbar = (GtkWidget *) g_object_get_data (G_OBJECT (window), "statusbar1");
       gtk_statusbar_pop (GTK_STATUSBAR (statusbar), 1);
       status_score = g_strdup (_("Score"));
-      status_text = g_malloc (strlen (status_score) + 1 + 10 + 1);
-      strcpy (status_text, status_score);
-      strcat (status_text, " ");
-      strcat (status_text, score_text);
+      status_text = g_strconcat (status_score, " ", score_text, NULL);
       gtk_statusbar_push (GTK_STATUSBAR (statusbar), 1, status_text);
       g_free (status_score);
       g_free (status_text);
