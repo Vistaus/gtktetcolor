@@ -308,29 +308,17 @@ void create_name_dialog (void)
 }
 
 
-void
-create_pause_dialog (void)
+void create_pause_dialog (void)
 {
-   GtkWidget *dialog, * main_vbox;
-   GtkWidget *label;
-
-   dialog = gtk_dialog_new_with_buttons (_("Game is paused"),
-                       GTK_WINDOW (main_window),
-                       GTK_DIALOG_MODAL |
-                       GTK_DIALOG_DESTROY_WITH_PARENT,
-                       "gtk-ok", GTK_RESPONSE_NONE, NULL);
-   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-
+   GtkWidget *dialog;
+   dialog = gtk_message_dialog_new (GTK_WINDOW (main_window),
+                                    GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                    GTK_MESSAGE_INFO,
+                                    GTK_BUTTONS_OK,
+                                    "%s", _("Gtktetcolor is paused"));
    g_signal_connect_swapped (dialog, "response",
-                             G_CALLBACK (on_pause_response),
-                             dialog);
+                             G_CALLBACK (on_pause_response), dialog);
 
-   label = gtk_label_new (_("Gtktetcolor is paused"));
-
-   gtk_misc_set_padding (GTK_MISC (label), 10, 10);
-
-   main_vbox = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-   gtk_container_add (GTK_CONTAINER (main_vbox), label);
    gtk_widget_show_all (dialog);
 }
 
