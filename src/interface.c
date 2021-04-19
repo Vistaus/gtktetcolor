@@ -195,54 +195,82 @@ void create_about_dialog (void)
 
 
 
-void
-create_scores_dialog (void)
+void create_scores_dialog (void)
 {
    GtkWidget *dialog, * main_vbox;
    GtkWidget *scores_frame;
-   GtkWidget *scores_table;
-   GtkWidget *name_label[10], *score_label[10];
-   float xalign, yalign;
    gint i;
-   gchar str[10];
 
    dialog = gtk_dialog_new_with_buttons (_("Top scores"),
                        GTK_WINDOW (main_window),
-                       GTK_DIALOG_MODAL |
-                       GTK_DIALOG_DESTROY_WITH_PARENT,
+                       GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                        "gtk-ok", GTK_RESPONSE_NONE, NULL);
    gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 
    g_signal_connect_swapped (dialog, "response",
-                            G_CALLBACK (gtk_widget_destroy),
-                            dialog);
+                            G_CALLBACK (gtk_widget_destroy), dialog);
 
    main_vbox = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
    scores_frame = gtk_frame_new (_("Hall of fame"));
    gtk_container_add (GTK_CONTAINER (main_vbox), scores_frame);
    gtk_container_set_border_width (GTK_CONTAINER (scores_frame), 5);
 
-   scores_table = gtk_table_new (10, 2, FALSE);
-   gtk_container_add (GTK_CONTAINER (scores_frame), scores_table);
-   gtk_container_set_border_width (GTK_CONTAINER (scores_table), 10);
-   gtk_table_set_col_spacings (GTK_TABLE (scores_table), 20);
-   gtk_table_set_row_spacings (GTK_TABLE (scores_table), 5);
-   
    read_score ();
-   for (i = 0; i < 10; i++) {
-      name_label[i] = gtk_label_new (name[i]);
-      g_snprintf (str, 10, "%d", saved_score[i]);
-      score_label[i] = gtk_label_new (str);
-      gtk_table_attach_defaults (GTK_TABLE (scores_table), name_label[i], 0, 1, i, i + 1);
-      gtk_misc_get_alignment (GTK_MISC (name_label[i]), &xalign, &yalign);
-      gtk_misc_set_alignment (GTK_MISC (name_label[i]), 0., yalign);
-      gtk_table_attach_defaults (GTK_TABLE (scores_table), score_label[i], 1, 2, i, i + 1);
-      gtk_misc_get_alignment (GTK_MISC (score_label[i]), &xalign, &yalign);
-      gtk_misc_set_alignment (GTK_MISC (score_label[i]), 1., yalign);
+
+   //-----GtkTreeView
+   GtkTreeModel     * tree_model;
+   GtkTreeView      * treeview;
+   GtkTreeSelection * tree_sel;
+   GtkTreeIter      iter;
+   GtkListStore     * store;
+
+#  define Nfields 3
+   store = gtk_list_store_new (Nfields,
+                               G_TYPE_INT,    /*   #   */
+                               G_TYPE_STRING, /* name  */
+                               G_TYPE_INT);   /* score */
+   tree_model = GTK_TREE_MODEL (store);
+
+   treeview = GTK_TREE_VIEW (gtk_tree_view_new_with_model (tree_model));
+   gtk_tree_view_set_grid_lines (GTK_TREE_VIEW (treeview), GTK_TREE_VIEW_GRID_LINES_HORIZONTAL);
+
+   tree_sel = gtk_tree_view_get_selection (treeview);
+   gtk_tree_selection_set_mode (tree_sel, GTK_SELECTION_NONE); //_SINGLE _MULTIPLE
+
+   g_object_unref (tree_model);
+
+   /* COLUMNS */
+   static const char * titles[] = { "#", "Name", "Score" };
+   GtkCellRenderer   *   r[Nfields];
+   GtkTreeViewColumn * col[Nfields];
+   for (i = 0; i < Nfields; i++)
+   {
+      r[i] = g_object_new (GTK_TYPE_CELL_RENDERER_TEXT, "xalign", 0.5, NULL);
+      col[i] = g_object_new (GTK_TYPE_TREE_VIEW_COLUMN,
+                             "title",          titles[i],
+                             "sort-column-id", i,
+                             "alignment",      0.5,
+                             "sizing",         GTK_TREE_VIEW_COLUMN_AUTOSIZE,
+                             NULL);
+      gtk_tree_view_column_pack_start (col[i], r[i], TRUE);
+      gtk_tree_view_column_add_attribute (col[i], r[i], "text", i);
+      gtk_tree_view_append_column (treeview, col[i]);
    }
 
+   for (i = 0; i < 10; i++) {
+      gtk_list_store_append (store, &iter);
+      gtk_list_store_set (store, &iter,
+                          0, i,
+                          1, name[i],
+                          2, saved_score[i],
+                          -1);
+   }
+   //-----End of GtkTreeView
+
+   gtk_container_add (GTK_CONTAINER (scores_frame), GTK_WIDGET (treeview));
    gtk_widget_show_all (dialog);
 }
+
 
 
 void create_name_dialog (void)
