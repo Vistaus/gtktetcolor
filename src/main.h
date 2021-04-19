@@ -74,7 +74,21 @@ struct
 }
 block;
 
-gboolean new_block (void);
+/* Global Variables */
+
+gint stop;
+extern gint cell_width;
+extern gint initial_level;
+extern gint max_score;
+extern gint destroy_delay;
+
+///#ifdef USE_GNOME
+extern gboolean sound_on;
+///#endif
+
+GdkPixbuf *colors[NUMBER_COLORS + 1];
+GdkPixbuf *icon_xpm;
+
 gint cell_state[X_SIZE][Y_SIZE];
 gint cell_state_wo_block[X_SIZE][Y_SIZE];
 gint cell_state_prev[X_SIZE][Y_SIZE];
@@ -85,11 +99,11 @@ gchar name[10][256], new_name[256];
 guint32 interval;
 gint timeout, level, level_tic, level_timeout;
 
+
 /* Main widgets*/
 
 GtkWidget *main_window;
 GtkWidget *drawingarea;
-
 
 char * get_config_dir_file (const char * file);
 void before_exit (void);

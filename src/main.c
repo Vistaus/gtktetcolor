@@ -32,26 +32,14 @@
 #include "pixmaps.h"
 #include "gtktetcolor.xpm"
 
-gint stop;
-
-/* Default settings */
-gint cell_width = 35, initial_level = 1, max_score = 0, destroy_delay = 100;
-#ifdef WIN32
-gint use_graykeys =  1; 
-#else  
-gint use_graykeys =  0; 
-#endif
-
+// defaults
+gint cell_width    = 35;
+gint initial_level = 1;
+gint max_score     = 0;
+gint destroy_delay = 100;
 ///#ifdef USE_GNOME
 gboolean sound_on = 0;
 ///#endif
-gchar *font_name;
-
-GdkPixbuf *colors[NUMBER_COLORS + 1], *border_w_gdkxpm, *border_h_gdkxpm;
-char *border_width_xpm[2 + border];
-char *border_height_xpm[2 + MAX_CELL_SIZE * Y_SIZE];
-gchar *label_name[MAX_LABEL];
-GdkPixbuf *icon_xpm;
 
 
 #define P_DIR "games"
@@ -116,17 +104,9 @@ int main (int argc, char *argv[])
 void before_exit (void)
 {
    gint i;
-
    for (i = 0; i < NUMBER_COLORS + 1; i++) {
       if (colors[i])
          g_object_unref (colors[i]);
    }
-   if (border_w_gdkxpm) {
-      g_object_unref (border_w_gdkxpm);
-   }
-   if (border_h_gdkxpm) {
-      g_object_unref (border_h_gdkxpm);
-   }
-
    free_pixmap_chars ();
 }

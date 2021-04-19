@@ -29,11 +29,6 @@
 
 #define PREFS_FILE "gtktetcolorrc"
 
-gint cell_width, left_margin, initial_level, destroy_delay;
-///#ifdef USE_GNOME
-gboolean sound_on;
-///#endif
-GtkStyle *label_style;
 gchar *font_name;
 gchar *label_name[MAX_LABEL];	/* Label identifiers */
 

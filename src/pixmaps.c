@@ -27,14 +27,8 @@
 #include "game.h"
 #include "pixmaps.h"
 
-gint stop;
-gint cell_width, initial_level, max_score, use_graykeys;
-gint nav_keys[4], alt_nav_keys[4];
-
-GdkPixbuf *colors[NUMBER_COLORS + 1];
+//GdkPixbuf *colors[NUMBER_COLORS + 1];
 static char *color[NUMBER_COLORS + 1][MAX_CELL_SIZE + 3];
-gchar *label_name[MAX_LABEL];
-
 
 gboolean create_pixmaps (GtkWidget * widget, gint first_time)
 {

@@ -43,3 +43,4 @@ gboolean rotate_block (gboolean (*rotate_cell)(gint i, gint *newx, gint *newy));
 
 gboolean shift_block (gint direction);
 
+gboolean new_block (void);

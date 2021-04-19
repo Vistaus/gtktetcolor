@@ -29,13 +29,7 @@
 
 #include "interface_menu.c"
 
-gint cell_width, initial_level, destroy_delay;
-///#ifdef USE_GNOME
-gboolean sound_on;
-///#endif
-GtkStyle *label_style;
 gchar *font_name;
-GdkPixbuf *icon_xpm;
 
 gchar *label_name[MAX_LABEL] =
 {

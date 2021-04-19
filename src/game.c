@@ -27,15 +27,7 @@
 #include "game.h"
 #include "pixmaps.h"
 
-gint stop;
-gint cell_width, initial_level, max_score, use_graykeys, destroy_delay;
 gint current_score_number;
-#ifdef USE_GNOME
-gboolean sound_on;
-#endif
-gint nav_keys[4], alt_nav_keys[4];
-gchar *font_name;
-
 gchar *label_name[MAX_LABEL];
 
 
