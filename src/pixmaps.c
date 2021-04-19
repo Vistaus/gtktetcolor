@@ -130,24 +130,29 @@ gboolean create_pixmaps (GtkWidget * widget, gint first_time)
 gboolean redraw_cells ()
 {
    gint i, j, cell_state_;
+   int xdest, ydest;
+
+   GdkWindow * gsurface = gtk_widget_get_window (drawingarea);
+   cairo_t * cr = gdk_cairo_create (gsurface);
 
    for (j = 0; j < Y_SIZE; j++)
    {
-      for (i = 0; i < X_SIZE; i++) {
+      for (i = 0; i < X_SIZE; i++)
+      {
          cell_state_ = cell_state[i][j];
          if (cell_state_prev[i][j] != cell_state_)
          {
-            gdk_draw_pixbuf (drawingarea->window,
-                             drawingarea->style->fg_gc[gtk_widget_get_state (drawingarea)],
-                             colors[cell_state_],
-                             0, 0,
-                             border + i * cell_width,
-                             border + j * cell_width, cell_width,
-                             cell_width, GDK_RGB_DITHER_NONE, 0, 0);
+            xdest = border + i * cell_width;
+            ydest = border + j * cell_width;
+            gdk_cairo_set_source_pixbuf (cr, colors[cell_state_],
+                                         xdest, ydest);
+            cairo_paint (cr);
             cell_state_prev[i][j] = cell_state_;
          }
       }
    }
+
+   cairo_destroy (cr);
    return FALSE;
 }
 
@@ -155,6 +160,7 @@ gboolean redraw_cells ()
 gboolean redraw_all_cells ()
 {
    gint i, j;
+   int xdest, ydest;
 
    GdkWindow * gsurface = gtk_widget_get_window (drawingarea);
    cairo_t * cr = gdk_cairo_create (gsurface);
@@ -162,22 +168,25 @@ gboolean redraw_all_cells ()
    int width  = gtk_widget_get_allocated_width (drawingarea);
    int height = gtk_widget_get_allocated_height (drawingarea);
 
+   // red border
    cairo_set_source_rgba (cr, 1.0, 0.0, 0.0, 1.0);
    cairo_set_line_width (cr, 4.0);
    cairo_rectangle (cr, 0.0, 0.0, width, height);
    cairo_stroke (cr);
-   cairo_destroy (cr);
 
-   for (j = 0; j < Y_SIZE; j++) {
-      for (i = 0; i < X_SIZE; i++) {
-         gdk_draw_pixbuf (drawingarea->window,
-                          drawingarea->style->fg_gc[gtk_widget_get_state (drawingarea)],
-                          colors[cell_state[i][j]], 0,
-                          0, border + i * cell_width,
-                          border + j * cell_width, cell_width, cell_width,
-                          GDK_RGB_DITHER_NONE, 0, 0);
+   for (j = 0; j < Y_SIZE; j++)
+   {
+      for (i = 0; i < X_SIZE; i++)
+      {
+         xdest = border + i * cell_width;
+         ydest = border + j * cell_width;
+         gdk_cairo_set_source_pixbuf (cr, colors[cell_state[i][j]],
+                                      xdest, ydest);
+         cairo_paint (cr);
       }
    }
+
+   cairo_destroy (cr);
    return FALSE;
 }
 
