@@ -41,6 +41,7 @@ gint destroy_delay = 100;
 gboolean sound_on = 0;
 ///#endif
 
+GtkApplication * gtktetcolor_app = NULL;
 
 #define P_DIR "games"
 char * get_config_dir_file (const char * file)
@@ -65,16 +66,8 @@ char * get_config_dir_file (const char * file)
 
 /* ============================================================================= */
 
-int main (int argc, char *argv[])
+static void app_activate (void)
 {
-#ifdef ENABLE_NLS
-   bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
-   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-   textdomain (GETTEXT_PACKAGE);
-#endif
-
-   gtk_init (&argc, &argv);
-
    /* Make sure confdir exists */
    char * confdir = get_config_dir_file (NULL);
    g_mkdir_with_parents (confdir, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
@@ -92,16 +85,10 @@ int main (int argc, char *argv[])
    srand (time (0));
 
    init_game (main_window);
-
-   gtk_main ();
-   before_exit ();
-
-   return 0;
 }
 
-/* ============================================================================= */
 
-void before_exit (void)
+void app_exit (void)
 {
    gint i;
    for (i = 0; i < NUMBER_COLORS + 1; i++) {
@@ -109,4 +96,39 @@ void before_exit (void)
          g_object_unref (colors[i]);
    }
    free_pixmap_chars ();
+   g_application_quit (G_APPLICATION (gtktetcolor_app));
 }
+
+
+int main (int argc, char *argv[])
+{
+#ifdef ENABLE_NLS
+   bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
+   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+   textdomain (GETTEXT_PACKAGE);
+#endif
+
+   int status = 0;
+
+#if GTK_CHECK_VERSION (3, 4, 0)
+   gtktetcolor_app = gtk_application_new ("org.gtk.gtktetcolor", G_APPLICATION_FLAGS_NONE);
+   if (g_application_register (G_APPLICATION (gtktetcolor_app), NULL, NULL)) {
+      if (g_application_get_is_remote (G_APPLICATION (gtktetcolor_app))) {
+         app_exit ();
+         return 0;
+      }
+   }
+   g_signal_connect (gtktetcolor_app, "activate", app_activate, NULL);
+   status = g_application_run (G_APPLICATION (gtktetcolor_app), 1, argv);
+   g_object_unref (gtktetcolor_app);
+#else
+   // initialize gtk
+   gtk_init (&argc, &argv);
+   app_activate ();
+   // main loop
+   gtk_main ();
+#endif
+
+   return status;
+}
+

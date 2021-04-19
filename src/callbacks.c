@@ -32,7 +32,7 @@ gboolean preferences_changed;
 gboolean
 on_main_window_delete_event (GtkWidget * widget, GdkEvent * event, gpointer user_data)
 {
-   gtk_main_quit ();
+   app_exit ();
    return FALSE;
 }
 
@@ -54,7 +54,6 @@ on_scores_activate (GtkWidget * menuitem, gpointer user_data)
 void
 on_quit_activate (GtkWidget * menuitem, gpointer user_data)
 {
-   gtk_main_quit ();
    gtk_widget_destroy (main_window);
 }
 

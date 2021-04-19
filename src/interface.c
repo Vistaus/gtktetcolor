@@ -67,7 +67,7 @@ GtkWidget * create_main_window (void)
 
    accel_group = gtk_accel_group_new ();
 
-   main_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+   main_window = gtk_application_window_new (gtktetcolor_app);
 
    gtk_window_set_title (GTK_WINDOW (main_window), _("gtktetcolor"));
    gtk_window_set_resizable (GTK_WINDOW (main_window), FALSE);

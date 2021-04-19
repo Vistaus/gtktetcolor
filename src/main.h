@@ -102,8 +102,10 @@ gint timeout, level, level_tic, level_timeout;
 
 /* Main widgets*/
 
+extern GtkApplication * gtktetcolor_app;
 GtkWidget *main_window;
 GtkWidget *drawingarea;
+void app_exit (void);
 
 char * get_config_dir_file (const char * file);
 void before_exit (void);
