@@ -149,7 +149,7 @@ GtkWidget * create_main_window (void)
                      G_CALLBACK (on_main_window_delete_event), NULL);
    g_signal_connect (G_OBJECT (main_window), "key-press-event",
                      G_CALLBACK (on_main_window_key_press_event), NULL);
-   g_signal_connect (G_OBJECT (drawingarea), "expose-event",
+   g_signal_connect (G_OBJECT (drawingarea), GTKCOMPAT_DRAW_SIGNAL,
                      G_CALLBACK (on_drawingarea_expose_event), NULL);
 
    gtk_window_add_accel_group (GTK_WINDOW (main_window), accel_group);
