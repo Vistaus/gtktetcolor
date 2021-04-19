@@ -75,7 +75,11 @@ GtkWidget * create_main_window (void)
    vbox1 = gtk_vbox_new (FALSE, 0);
    gtk_container_add (GTK_CONTAINER (main_window), vbox1);
 
+#if GTK_CHECK_VERSION (3, 10, 0)
+   create_menubar (GTK_APPLICATION_WINDOW (main_window), gtktetcolor_app);
+#else
    create_menubar (GTK_BOX (vbox1), GTK_WINDOW (main_window));
+#endif
 
    working_hbox = gtk_hbox_new (FALSE, 0);
    gtk_box_pack_start (GTK_BOX (vbox1), working_hbox, TRUE, TRUE, 0);

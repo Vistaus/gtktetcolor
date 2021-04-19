@@ -23,13 +23,13 @@ gboolean on_main_window_delete_event (GtkWidget * widget, GdkEvent * event, gpoi
 gboolean on_main_window_key_press_event (GtkWidget * widget, GdkEventKey * event, gpointer user_data);
 gboolean on_drawingarea_expose_event (GtkWidget * widget, GdkEventExpose * event, gpointer user_data);
 
-void on_new_activate (GtkWidget * menuitem, gpointer user_data);
-void on_scores_activate (GtkWidget * menuitem, gpointer user_data);
-void on_quit_activate (GtkWidget * menuitem, gpointer user_data);
-void on_about_activate (GtkWidget * menuitem, gpointer user_data);
-void on_pause_activate (GtkWidget * menuitem, gpointer user_data);
-void help_on_keys_activate (GtkWidget * menuitem, gpointer user_data);
-void on_preferences_activate (GtkWidget * menuitem, gpointer user_data);
+void on_new_activate (void);
+void on_pause_activate (void);
+void on_scores_activate (void);
+void on_preferences_activate (void);
+void on_quit_activate (void);
+//void on_about_activate (void);
+void help_on_keys_activate (void);
 
 void on_name_response (GtkDialog * dlg, int response, gpointer user_data);
 void on_pause_response (GtkDialog * dlg, int response, gpointer user_data);

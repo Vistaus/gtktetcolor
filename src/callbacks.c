@@ -37,24 +37,29 @@ on_main_window_delete_event (GtkWidget * widget, GdkEvent * event, gpointer user
 }
 
 
-void
-on_new_activate (GtkWidget * menuitem, gpointer user_data)
+void on_new_activate (void)
 {
-   init_game (menuitem);
+   init_game (NULL);
 }
 
-
-void
-on_scores_activate (GtkWidget * menuitem, gpointer user_data)
+void on_scores_activate (void)
 {
    create_scores_dialog ();
 }
 
+void on_preferences_activate (void)
+{
+   create_preferences_dialog ();
+}
 
-void
-on_quit_activate (GtkWidget * menuitem, gpointer user_data)
+void on_quit_activate (void)
 {
    gtk_widget_destroy (main_window);
+}
+
+void help_on_keys_activate (void)
+{
+   create_help_dialog ();
 }
 
 
@@ -157,8 +162,7 @@ void on_pause_response (GtkDialog * dlg, int response, gpointer user_data)
    gtk_widget_destroy (GTK_WIDGET (dlg));
 }
 
-void
-on_pause_activate (GtkWidget * menuitem, gpointer user_data)
+void on_pause_activate (void)
 {
    if (continue_game) {
       create_pause_dialog ();
@@ -170,20 +174,6 @@ on_pause_activate (GtkWidget * menuitem, gpointer user_data)
       }
       continue_game = 0;
    }
-}
-
-
-void
-help_on_keys_activate (GtkWidget * menuitem, gpointer user_data)
-{
-   create_help_dialog ();
-}
-
-
-void
-on_preferences_activate (GtkWidget * menuitem, gpointer user_data)
-{
-   create_preferences_dialog ();
 }
 
 
