@@ -72,7 +72,7 @@ GtkWidget * create_main_window (void)
    gtk_window_set_title (GTK_WINDOW (main_window), _("gtktetcolor"));
    gtk_window_set_resizable (GTK_WINDOW (main_window), FALSE);
 
-   vbox1 = gtk_vbox_new (FALSE, 0);
+   vbox1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
    gtk_container_add (GTK_CONTAINER (main_window), vbox1);
 
 #if GTK_CHECK_VERSION (3, 10, 0)
@@ -81,10 +81,10 @@ GtkWidget * create_main_window (void)
    create_menubar (GTK_BOX (vbox1), GTK_WINDOW (main_window));
 #endif
 
-   working_hbox = gtk_hbox_new (FALSE, 0);
+   working_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
    gtk_box_pack_start (GTK_BOX (vbox1), working_hbox, TRUE, TRUE, 0);
 
-   left_margin_vbox = gtk_vbox_new (FALSE, 5);
+   left_margin_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
    gtk_box_pack_start (GTK_BOX (working_hbox), left_margin_vbox, TRUE, TRUE, 0);
    gtk_container_set_border_width (GTK_CONTAINER (left_margin_vbox), 10);
 
@@ -121,7 +121,7 @@ GtkWidget * create_main_window (void)
    gtk_widget_set_size_request (drawingarea, X_SIZE * cell_width + 2 * border,
                                 Y_SIZE * cell_width + 2 * border);
 
-   right_margin_vbox = gtk_vbox_new (FALSE, 5);
+   right_margin_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
    gtk_box_pack_start (GTK_BOX (working_hbox), right_margin_vbox, TRUE, TRUE, 0);
    gtk_container_set_border_width (GTK_CONTAINER (right_margin_vbox), 10);
 
@@ -210,7 +210,7 @@ create_scores_dialog (void)
                        GTK_WINDOW (main_window),
                        GTK_DIALOG_MODAL |
                        GTK_DIALOG_DESTROY_WITH_PARENT,
-                       GTK_STOCK_OK, GTK_RESPONSE_NONE, NULL);
+                       "gtk-ok", GTK_RESPONSE_NONE, NULL);
    gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 
    g_signal_connect_swapped (dialog, "response",
@@ -255,7 +255,7 @@ void create_name_dialog (void)
                        GTK_WINDOW (main_window),
                        GTK_DIALOG_MODAL |
                        GTK_DIALOG_DESTROY_WITH_PARENT,
-                       GTK_STOCK_OK, GTK_RESPONSE_NONE, NULL);
+                       "gtk-ok", GTK_RESPONSE_NONE, NULL);
    gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 
    g_signal_connect_swapped (dialog, "response",
@@ -290,7 +290,7 @@ create_pause_dialog (void)
                        GTK_WINDOW (main_window),
                        GTK_DIALOG_MODAL |
                        GTK_DIALOG_DESTROY_WITH_PARENT,
-                       GTK_STOCK_OK, GTK_RESPONSE_NONE, NULL);
+                       "gtk-ok", GTK_RESPONSE_NONE, NULL);
    gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 
    g_signal_connect_swapped (dialog, "response",
@@ -316,7 +316,7 @@ create_help_dialog (void)
    dialog = gtk_dialog_new_with_buttons (_("Help on keys"),
                        GTK_WINDOW (main_window),
                        GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                       GTK_STOCK_OK, GTK_RESPONSE_NONE, NULL);
+                       "gtk-ok", GTK_RESPONSE_NONE, NULL);
    gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 
    g_signal_connect_swapped (dialog, "response",
@@ -368,9 +368,9 @@ void create_preferences_dialog (void)
    preferences_dialog = gtk_dialog_new_with_buttons (_("GtkTetcolor preferences"),
                             GTK_WINDOW (main_window),
                             GTK_DIALOG_DESTROY_WITH_PARENT,
-                            GTK_STOCK_OK, GTK_RESPONSE_OK,
-                            GTK_STOCK_APPLY, GTK_RESPONSE_APPLY,
-                            GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE, NULL);
+                            "gtk-ok", GTK_RESPONSE_OK,
+                            "gtk-apply", GTK_RESPONSE_APPLY,
+                            "gtk-close", GTK_RESPONSE_CLOSE, NULL);
    g_signal_connect_swapped (preferences_dialog, "response",
                              G_CALLBACK (preferences_dialog_response),
                              preferences_dialog);
@@ -379,7 +379,7 @@ void create_preferences_dialog (void)
    prefs_notebook = gtk_notebook_new ();
    gtk_box_pack_start (GTK_BOX (main_vbox), prefs_notebook, FALSE, TRUE, 10);
 
-   preferences_vbox = gtk_vbox_new (FALSE, 5);
+   preferences_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
    options_label = gtk_label_new (_("Game options"));
 
    gtk_container_add (GTK_CONTAINER (prefs_notebook), preferences_vbox);
@@ -396,7 +396,7 @@ void create_preferences_dialog (void)
                                gtk_notebook_get_nth_page (GTK_NOTEBOOK (prefs_notebook), 1),
                                fonts_label);
 
-   preferences_hbox1 = gtk_hbox_new (FALSE, 0);
+   preferences_hbox1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
    gtk_box_pack_start (GTK_BOX (preferences_vbox), preferences_hbox1, FALSE, TRUE, 10);
 
    cell_size_label = gtk_label_new (_("Cell size: "));
@@ -408,7 +408,7 @@ void create_preferences_dialog (void)
 
    gtk_box_pack_start (GTK_BOX (preferences_hbox1), cell_size_spinbutton, FALSE, TRUE, 10);
 
-   preferences_hbox2 = gtk_hbox_new (FALSE, 0);
+   preferences_hbox2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
    gtk_box_pack_start (GTK_BOX (preferences_vbox), preferences_hbox2, FALSE, TRUE, 10);
 
    initial_level_label = gtk_label_new (_("Initial level: "));
@@ -419,7 +419,7 @@ void create_preferences_dialog (void)
    g_object_set_data_full (G_OBJECT (preferences_dialog), "initial_level_spinbutton", initial_level_spinbutton, NULL);
    gtk_box_pack_start (GTK_BOX (preferences_hbox2), initial_level_spinbutton, FALSE, TRUE, 10);
 
-   preferences_destroy_delay_hbox = gtk_hbox_new (FALSE, 0);
+   preferences_destroy_delay_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
    gtk_box_pack_start (GTK_BOX (preferences_vbox), preferences_destroy_delay_hbox, FALSE, TRUE, 10);
 
    destroy_delay_label = gtk_label_new (_("Delay before cell destroying, ms: "));
@@ -430,11 +430,11 @@ void create_preferences_dialog (void)
    g_object_set_data_full (G_OBJECT (preferences_dialog), "destroy_delay_spinbutton", destroy_delay_spinbutton, NULL);
    gtk_box_pack_start (GTK_BOX (preferences_destroy_delay_hbox), destroy_delay_spinbutton, FALSE, TRUE, 10);
 
-   preferences_hbox3 = gtk_hbox_new (FALSE, 0);
+   preferences_hbox3 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
    gtk_box_pack_start (GTK_BOX (preferences_vbox), preferences_hbox3, FALSE, TRUE, 10);
 
 ///#ifdef USE_GNOME
-   sound_hbox = gtk_hbox_new (FALSE, 0);
+   sound_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
    gtk_box_pack_start (GTK_BOX (preferences_vbox), sound_hbox, FALSE, FALSE, 10);
 
    sound_checkbutton = gtk_check_button_new_with_label (_("Use sound"));
