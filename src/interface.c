@@ -329,6 +329,15 @@ create_help_dialog (void)
    GtkWidget *dialog, * main_vbox;
    GtkWidget *label;
 
+   // https://stackoverflow.com/questions/44381132/how-to-display-text-on-gtk-label-using-two-different-fonts
+   PangoAttrList * attrlist = pango_attr_list_new ();
+   PangoAttribute * attr;
+   PangoFontDescription * fd = pango_font_description_new ();
+   pango_font_description_set_family (fd, "monospace");
+   attr = pango_attr_font_desc_new (fd);
+   pango_font_description_free (fd);
+   pango_attr_list_insert (attrlist, attr);
+
    dialog = gtk_dialog_new_with_buttons (_("Help on keys"),
                        GTK_WINDOW (main_window),
                        GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -345,11 +354,11 @@ create_help_dialog (void)
                        "Right arrow / Num 6 - shift block right\n"
                        "Up arrow    / Num 8 - rotate block counter-clockwise\n"
                        "Space - drop block"));
-
-   gtk_misc_set_padding (GTK_MISC (label), 10, 10);
+   gtk_label_set_attributes (GTK_LABEL (label), attrlist);
 
    main_vbox = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-   gtk_container_add (GTK_CONTAINER (main_vbox), label);
+   gtk_container_set_border_width (GTK_CONTAINER (main_vbox), 10);
+   gtk_box_pack_start (GTK_BOX (main_vbox), label, FALSE, FALSE, 5);
    gtk_widget_show_all (dialog);
 }
 
